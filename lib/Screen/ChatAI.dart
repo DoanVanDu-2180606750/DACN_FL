@@ -1,6 +1,7 @@
 import 'package:fit_25/Screen/Message.dart';
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+
 const String apiKey = "AIzaSyCd89dV0adlXhDKUYosQu5PV86cD96hQIM";
 
 class ChatScreen extends StatefulWidget {
@@ -57,10 +58,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 },
               ),
             ),
-            if (_loading) const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.0),
-              child: Center(child: CircularProgressIndicator()),
-            ),
+            if (_loading)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                child: Center(child: CircularProgressIndicator()),
+              ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 15,
@@ -72,7 +74,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: TextField(
                       autofocus: true,
                       focusNode: _textFieldFocus,
-                      decoration: textFieldDirection(),
+                      decoration: _textFieldDecoration(),
                       controller: _textController,
                       onSubmitted: _sendChatMessage,
                     ),
@@ -91,90 +93,91 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  InputDecoration textFieldDirection(){
+  // Input decoration for the text field
+  InputDecoration _textFieldDecoration() {
     return InputDecoration(
-      contentPadding: const EdgeInsets.all(10),
-      hintText: 'Enter  a prompt...',
+      contentPadding: const EdgeInsets.all(15),
+      hintText: 'Enter a prompt...',
       border: OutlineInputBorder(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(14)
-        ),
+        borderRadius: const BorderRadius.all(Radius.circular(14)),
         borderSide: BorderSide(
           color: Theme.of(context).colorScheme.secondary,
         ),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: const BorderRadius.all( 
-          Radius.circular(14)
-        ),
+        borderRadius: const BorderRadius.all(Radius.circular(14)),
         borderSide: BorderSide(
           color: Theme.of(context).colorScheme.secondary,
-        )
-      ), 
+        ),
+      ),
     );
   }
 
+  // Method to send chat messages
   Future<void> _sendChatMessage(String message) async {
-  if (message.trim().isEmpty) return;
+    if (message.trim().isEmpty) return;
 
-  setState(() {
-    _loading = true;
-  });
+    setState(() {
+      _loading = true; // Đặt trạng thái đang tải
+    });
 
-  for (int attempt = 1; attempt <= 3; attempt++) { // Attempt 3 times
-    try {
-      final response = await _chatSession.sendMessage(Content.text(message));
-      final text = response.text;
+    // Chỉ cho phép gọi AI trên một tin nhắn tại một thời điểm
+    if (!_loading) {
+      for (int attempt = 1; attempt <= 3; attempt++) { // Attempt 3 times
+        try {
+          final response = await _chatSession.sendMessage(Content.text(message));
+          final text = response.text;
 
-      if (text != null) {
-        // Process the successful response
-        setState(() {
-          _scrollDown();
-        });
-        break; // Exit the loop on success
-      } else {
-        _showError('No response from API.');
-        break; 
-      }
-    } catch (e) {
-      if (e is GenerativeAIException && e.message.contains('503')) {
-        // If the specific error is encountered, wait and retry.
-        if (attempt < 3) {
-          await Future.delayed(Duration(seconds: 5)); // Wait 5 seconds before retrying
-        } else {
-          _showError('Error: Model is overloaded. Please try again later.');
+          if (text != null) {
+            // Lưu phản hồi của AI ở đây
+            setState(() {
+              // Cập nhật chat history, sau đó rollback trạng thái
+              _scrollDown(); // Cuộn xuống cuối danh sách
+            });
+            break; // Thoát khỏi vòng lặp khi nhận được phản hồi
+          } else {
+            _showError('No response from API.');
+            break; 
+          }
+        } catch (e) {
+          if (e is GenerativeAIException && e.message.contains('503')) {
+            // Nếu gặp lỗi 503, chờ và thử lại
+            if (attempt < 3) {
+              await Future.delayed(Duration(seconds: 5)); // Chờ 5 giây trước khi thử lại
+            } else {
+              _showError('Model is overloaded. Please try again later.');
+            }
+          } else {
+            _showError('Error: $e');
+          }
+        } finally {
+          _textController.clear(); // Xoá trường nhập liệu
+          setState(() {
+            _loading = false; // dòng này sẽ kiểm soát trạng thái của AI
+          });
+          _textFieldFocus.requestFocus(); // Giữ con trỏ trên trường văn bản
         }
-      } else {
-        _showError('Error: $e');
       }
-    } finally {
-      _textController.clear();
-      setState(() {
-        _loading = false;
-      });
-      _textFieldFocus.requestFocus();
     }
   }
-}
 
 
-
+  // Scrolls the view to the bottom
   void _scrollDown() {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
-        duration: const Duration(
-          milliseconds: 750,
-        ),
+        duration: const Duration(milliseconds: 750),
         curve: Curves.easeOutCirc,
       ),
     );
   }
 
-  void _showError(String message){
+  // Shows an error dialog with the provided message
+  void _showError(String message) {
     showDialog<void>(
-      context: context, 
-      builder: (context){
+      context: context,
+      builder: (context) {
         return AlertDialog(
           title: const Text('Something went wrong'),
           content: SingleChildScrollView(
@@ -189,8 +192,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ],
         );
-      }
+      },
     );
   }
 }
-  
