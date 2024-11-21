@@ -69,7 +69,7 @@
     },
     {
       "name": "flutter_markdown",
-      "rootUri": "file:///C:/Users/vdyla/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_markdown-0.7.4+1",
+      "rootUri": "file:///C:/Users/vdyla/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_markdown-0.7.4+2",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -254,7 +254,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2024-11-20T08:42:38.488302Z",
+  "generated": "2024-11-21T05:53:04.907992Z",
   "generator": "pub",
   "generatorVersion": "3.5.4",
   "flutterRoot": "file:///C:/src/flutter",

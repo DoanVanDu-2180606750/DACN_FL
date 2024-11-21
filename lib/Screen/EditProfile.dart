@@ -26,7 +26,7 @@ class ProfilePage extends StatelessWidget {
 
             // Name Field
             const Text('Name', style: TextStyle(fontSize: 16)),
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 hintText: 'Enter your name',
                 border: OutlineInputBorder(),
@@ -37,7 +37,7 @@ class ProfilePage extends StatelessWidget {
 
             // Phone Field
             const Text('Phone', style: TextStyle(fontSize: 16)),
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 hintText: 'Enter your phone number',
                 border: OutlineInputBorder(),
@@ -49,7 +49,7 @@ class ProfilePage extends StatelessWidget {
 
             // Email Field
             const Text('Email', style: TextStyle(fontSize: 16)),
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 hintText: 'Enter your email',
                 border: OutlineInputBorder(),
@@ -61,7 +61,7 @@ class ProfilePage extends StatelessWidget {
             
             // Address Field
             const Text('Address', style: TextStyle(fontSize: 16)),
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 hintText: 'Enter your address',
                 border: OutlineInputBorder(),

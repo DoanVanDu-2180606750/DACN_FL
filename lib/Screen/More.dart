@@ -42,11 +42,11 @@ class MoreScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const InfoCard(title: 'Họ và Tên',data:  'Đoàn Văn Dự',color:  Colors.green),
-                  const InfoCard(title: 'Số Điện Thoại',data:  '0339455501',color:  Colors.green),
+                  InfoCard(title: 'Họ và Tên',data:  'Đoàn Văn Dự',color:  Colors.green),
+                  InfoCard(title: 'Số Điện Thoại',data:  '0339455501',color:  Colors.green),
                 ],
               ),
               const SizedBox(height: 10), // Khoảng cách giữa các dòng
