@@ -11,11 +11,10 @@ class MoreScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         // Tạo AppBar cho phần đầu của trang
-        backgroundColor: const Color.fromARGB(255, 15, 12, 226), // Màu nền của AppBar
         elevation: 0, // Không có bóng đổ
         title: const Text(
           'Thông Tin Cá Nhân', // Tiêu đề
-          style: TextStyle(fontSize: 25, color: Colors.white), // Cài đặt kiểu chữ
+          style: TextStyle(fontSize: 25, color: Color.fromARGB(255, 12, 5, 5)), // Cài đặt kiểu chữ
         ),
       ),
       body: Center( // Center widget for better layout

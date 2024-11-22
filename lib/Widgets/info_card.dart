@@ -2,6 +2,15 @@
 
 import 'package:flutter/material.dart';
 
+final List<Map<String, String>> infoCards = [
+  {'title': 'Weight', 'data': '71 kg', 'color': 'green'},
+  {'title': 'Height', 'data': '171 cm', 'color': 'green'},
+  {'title': 'Steps', 'data': '867/6000', 'color': 'green', 'subtitle': '14%'},
+  {'title': 'Calories burnt', 'data': '256', 'color': 'red'},
+  {'title': 'Heart Rate', 'data': '89 BPM', 'color': 'green'},
+];
+
+
 class InfoCard extends StatelessWidget {
   final String title;
   final String data;

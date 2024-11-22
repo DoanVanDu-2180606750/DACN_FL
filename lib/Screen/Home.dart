@@ -1,7 +1,13 @@
+import 'package:fit_25/Providers/weatherData.dart';
 import 'package:fit_25/Screen/More.dart';
-import 'package:fit_25/Screen/Other.dart';
 import 'package:fit_25/Screen/ChatAI.dart';
-import 'package:flutter/material.dart'; // Nhập môn Flutter material package
+import 'package:fit_25/Screen/Weather.dart';
+import 'package:fit_25/Widgets/info_card.dart';
+import 'package:fit_25/Widgets/weather_card.dart';
+import 'package:fit_25/Widgets/weatherhome_card.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart'; // Nhập môn Flutter material package
 
 // Khai báo lớp MyHomePage kế thừa StatefulWidget
 class MyHomePage extends StatefulWidget {
@@ -14,6 +20,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<WeatherProvider>(context, listen: false).fetchWeather();
+    final weatherProvider = Provider.of<WeatherProvider>(context, listen: false);
+    weatherProvider.fetchWeather(); // Gọi đầu tiên để lấy dữ liệu
+    weatherProvider.startAutoRefreshing(); // Bắt đầu tự động làm mới
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -22,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final weatherProvider = Provider.of<WeatherProvider>(context);
     // Phương thức xây dựng widget giao diện người dùng
     return Scaffold(
       backgroundColor: Colors.white, // Thiết lập nền trắng cho giao diện
@@ -34,11 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.start, // Căn lề trái
           children: [
             Text(
-              'Ho Chi Minh city', // Tên thành phố
-              style: TextStyle(fontSize: 18, color: Colors.grey[700]), // Cài đặt kiểu chữ
-            ),
-            Text(
-              '29°C', // Nhiệt độ hiện tại
+              'logo', // Nhiệt độ hiện tại
               style: TextStyle(fontSize: 15, color: Colors.grey[700]), // Cài đặt kiểu chữ
             ),
           ],
@@ -97,9 +109,9 @@ class _MyHomePageState extends State<MyHomePage> {
       case 0:
         return _buildHome(); // Gọi phương thức cho giao diện chính
       case 1:
-        return ChatScreen(); // Gửi đến giao diện tin nhắn
+        return const ChatScreen(); // Gửi đến giao diện tin nhắn
       case 2:
-        return const OtherScreen(); // Gửi đến giao diện khác
+        return const WeatherScreen(); // Gửi đến giao diện khác
       case 3:
         return const MoreScreen(); // Gửi đến giao diện khác
       default:
@@ -109,36 +121,51 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // Phương thức cho giao diện chính
   Widget _buildHome() {
+    final weatherProvider = Provider.of<WeatherProvider>(context);
+    String formattedTime = DateFormat('hh:mm a').format(DateTime.now());
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         // Sử dụng Column để hiện thị nhiều widget
         crossAxisAlignment: CrossAxisAlignment.start, // Căn lề trái
         children: [
-          const Text(
-            'Hello John', // Lời chào đến người dùng
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, ), // Định dạng kiểu chữ
-          ),
+          Center(
+              child: weatherProvider.isLoading // Kiểm tra trạng thái load
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : weatherProvider.error != null // Kiểm tra lỗi
+                      ? Text(
+                          weatherProvider.error!, // Kết quả lỗi
+                          style: const TextStyle(color: Colors.red),
+                        )
+                      : WeatheHome(
+                          weather: weatherProvider.weatherData!, // Lấy dữ liệu thời tiết
+                          formattedDate: DateFormat('EEEE d, MMMM yyyy').format(DateTime.now()),
+
+                        ),
+            ),
+
           const SizedBox(height: 50),
-          Row(
+          
+          const Row(
             // Dòng để hiện thị thông tin về cân nặng và chiều cao
-            mainAxisAlignment: MainAxisAlignment.spaceBetween, // Căn giữa
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+            // Căn giữa
             children: [
               // Thẻ thông tin cho Cân nặng
-              _buildInfoCard('Weight', '71 kg', Colors.green),
+              InfoCard(title: 'Weight',data:  '71 kg',color:  Colors.green),
               // Thẻ thông tin cho Chiều cao
-              _buildInfoCard('Height', '171 cm', Colors.green),
+              InfoCard(title: 'Height',data:  '171 cm',color:  Colors.green),
             ],
           ),
           const SizedBox(height: 10), // Khoảng cách giữa các dòng
-          Row(
+          const Row(
             // Dòng để hiện thị thông tin về số bước và calo đã tiêu thụ
             mainAxisAlignment: MainAxisAlignment.spaceBetween, // Căn giữa
             children: [
               // Thẻ thông tin cho Số bước với phụ đề
-              _buildInfoCard('Steps', '867/6000', Colors.green, subtitle: '14%'),
+              InfoCard( title: 'Steps',data:  '867/6000',color:  Colors.green, subtitle: '14%'),
               // Thẻ thông tin cho Calo đã tiêu thụ
-              _buildInfoCard('Calories burnt', '256', Colors.red),
+              InfoCard( title: 'Calories burnt',data:  '256',color: Colors.red),
             ],
           ),
           const SizedBox(height: 10), // Khoảng cách giữa các dòng
@@ -147,7 +174,9 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween, // Căn giữa
             children: [
               // Thẻ thông tin cho Tần số tim
-              _buildInfoCard('Heart Rate', '89 BPM', Colors.green),
+              const InfoCard(title:'Heart Rate', data: '89 BPM',color:  Colors.green),
+              
+              
               GestureDetector(
                 // Nhận diện sự kiện chạm
                 onTap: () {
@@ -177,48 +206,5 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
-  }
-
-  // Hàm xây dựng một thẻ thông tin với tiêu đề, dữ liệu và màu sắc
-  Widget _buildInfoCard(String title, String data, Color color, {String? subtitle}) {
-    return Container(
-      padding: const EdgeInsets.all(16), // Padding cho thẻ
-      height: 80, // Chiều cao của thẻ
-      width: 160, // Chiều rộng của thẻ
-      decoration: BoxDecoration(
-        color: Colors.black, // Màu nền của thẻ
-        borderRadius: BorderRadius.circular(10), // Bo góc thẻ
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Căn lề trái cho nội dung trong thẻ
-        children: [
-          Text(
-            title, // Tiêu đề được truyền vào
-            style: const TextStyle(color: Colors.white, fontSize: 14), // Định dạng kiểu chữ
-          ),
-          const Spacer(), // Khoảng trống giữa tiêu đề và dữ liệu
-          Row(
-            // Dòng để hiện thị dữ liệu và phụ đề (nếu có)
-            children: [
-              Text(
-                data, // Dữ liệu hiển thị
-                style: TextStyle(
-                  color: color, // Màu chữ phụ thuộc vào tham số truyền vào
-                  fontSize: 18, // Kích thước chữ
-                  fontWeight: FontWeight.bold, // Kiểu chữ đậm
-                ),
-              ),
-              if (subtitle != null) ...[
-                const SizedBox(width: 5), // Khoảng cách nếu có phụ đề
-                Text(
-                  subtitle, // Phụ đề (nếu có)
-                  style: const TextStyle(color: Colors.white, fontSize: 14), // Định dạng kiểu chữ cho phụ đề
-                ),
-              ],
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+  } 
 }
