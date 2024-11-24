@@ -1,54 +1,31 @@
-import 'package:fit_25/Model/weather_model.dart';
 import 'package:flutter/material.dart';
 
 class WeatheHome extends StatelessWidget {
-  final WeatherData weather;
   final String formattedDate;
+  final String formattedTime;
 
   const WeatheHome({
     super.key,
-    required this.weather,
     required this.formattedDate,
+    required this.formattedTime,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Current address name
-        Text(
-          weather.name,
-          style: const TextStyle(
-            fontSize: 20,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        // Current temperature
-        Text(
-          "${weather.temperature.current.toStringAsFixed(0)}°C",
-          style: const TextStyle(
-            fontSize: 20,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        // Weather condition
-        if (weather.weather.isNotEmpty)
-          Text(
-            weather.weather[0].main,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        const SizedBox(height: 10),
-        // Current date and time
         Text(
           formattedDate,
           style: const TextStyle(
-            fontSize: 18,
+            fontSize: 15,
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          formattedTime,
+          style: const TextStyle(
+            fontSize: 15,
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),

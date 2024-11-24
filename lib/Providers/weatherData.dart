@@ -1,7 +1,4 @@
-
-
 import 'dart:async';
-
 import 'package:fit_25/Model/weather_model.dart';
 import 'package:fit_25/Service/weather_aip.dart';
 import 'package:flutter/material.dart';
@@ -16,32 +13,35 @@ class WeatherProvider with ChangeNotifier {
   String? get error => _error;
   bool get isLoading => _isLoading;
 
-  // Tạo một thể hiện của WeatherService
+  // Create an instance of WeatherService
   final WeatherService _weatherService = WeatherService();
 
+  // Fetch weather data asynchronously
   Future<void> fetchWeather() async {
-    _isLoading = true;
-    notifyListeners();
+    _isLoading = true; // Set loading to true at the beginning
+    notifyListeners(); // Notify listeners for loading state change
 
     try {
-      // Gọi phương thức fetchWeather từ WeatherService
-      _weatherData = await _weatherService.fetchWeather(); // Lấy dữ liệu thời tiết
-      _error = null;
+      // Fetch weather data from WeatherService
+      _weatherData = await _weatherService.fetchWeather();
+      _error = null; // Reset error if fetching is successful
     } catch (e) {
-      _error = e.toString();
+      _error = e.toString(); // Set error message
     } finally {
-      _isLoading = false;
-      notifyListeners();
+      _isLoading = false; // Set loading to false at the end
+      notifyListeners(); // Notify listeners again to update UI
     }
   }
 
+  // Start automatic refreshing of weather data
   void startAutoRefreshing() {
-    _timer?.cancel(); // Hủy timer cũ nếu có
-    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
-      fetchWeather(); // Gọi lại dữ liệu thời tiết mỗi phút
+    _timer?.cancel(); // Cancel the old timer if exists
+    _timer = Timer.periodic(const Duration(minutes: 10), (timer) {
+      fetchWeather(); // Fetch weather data periodically
     });
   }
 
+  // Stop automatic refreshing
   void stopAutoRefreshing() {
     _timer?.cancel();
   }

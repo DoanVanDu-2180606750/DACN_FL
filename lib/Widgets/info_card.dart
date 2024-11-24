@@ -2,13 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-final List<Map<String, String>> infoCards = [
-  {'title': 'Weight', 'data': '71 kg', 'color': 'green'},
-  {'title': 'Height', 'data': '171 cm', 'color': 'green'},
-  {'title': 'Steps', 'data': '867/6000', 'color': 'green', 'subtitle': '14%'},
-  {'title': 'Calories burnt', 'data': '256', 'color': 'red'},
-  {'title': 'Heart Rate', 'data': '89 BPM', 'color': 'green'},
-];
 
 
 class InfoCard extends StatelessWidget {
@@ -16,6 +9,7 @@ class InfoCard extends StatelessWidget {
   final String data;
   final Color color;
   final String? subtitle;
+  final VoidCallback? onTap;
 
   const InfoCard({
     Key? key,
@@ -23,48 +17,42 @@ class InfoCard extends StatelessWidget {
     required this.data,
     required this.color,
     this.subtitle,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.all(10),
-      height: 80,
-      width: 160,
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(color: Colors.white, fontSize: 14),
-          ),
-          const Spacer(),
-          Row(
-            children: [
+    return GestureDetector( // Sử dụng GestureDetector để nhận sự kiện nhấn
+      onTap: onTap, // Gọi callback khi nhấn
+      child: Container(
+        height: 90,
+        width: (MediaQuery.of(context).size.width / 2) - 20,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: TextStyle(fontSize: 17, color: Colors.white),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              data,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: const Color.fromARGB(255, 14, 249, 65)),
+            ),
+            if (subtitle != null) ...[
+              const SizedBox(height: 5),
               Text(
-                data,
-                style: TextStyle(
-                  color: color,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                subtitle!,
+                style: TextStyle(color: Colors.white54),
               ),
-              if (subtitle != null)
-                ...[
-                  const SizedBox(width: 5), // Khoảng cách nếu có phụ đề
-                  Text(
-                    subtitle!,
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
-                  ),
-                ],
             ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

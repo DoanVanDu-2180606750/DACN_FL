@@ -1,5 +1,6 @@
+import 'package:fit_25/Providers/bodyProvider.dart';
+import 'package:fit_25/Providers/timeProvider.dart';
 import 'package:fit_25/Providers/weatherData.dart';
-import 'package:fit_25/Screen/Weather.dart';
 import 'package:fit_25/Screen/home.dart';
 import 'package:fit_25/Service/assets_api.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,12 @@ void main() async {
   // await Firebase.initializeApp();
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => WeatherProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => TimeProvider()),
+        ChangeNotifierProvider(create: (context) => UserInfoProvider()),
+        ChangeNotifierProvider(create: (context) => WeatherProvider()) // Thêm aqui
+      ],
       child: const MyApp(),
     ),
   );
@@ -24,7 +29,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     

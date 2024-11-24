@@ -1,0 +1,208 @@
+{
+   "checksum": "30742d2e61f775859eade014ba87a797",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "13288434957856776",
+            "date_last_used": "13372959737111131",
+            "guid": "edff90e9-751a-4aad-995a-00841dbe76ce",
+            "id": "13",
+            "name": "Gmail",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://accounts.google.com/b/0/AddMailService",
+            "visit_count": 7
+         }, {
+            "date_added": "13288434957857251",
+            "date_last_used": "13376709848637136",
+            "guid": "8376961c-1192-40ed-a104-ac44d52344d7",
+            "id": "14",
+            "name": "YouTube",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://youtube.com/",
+            "visit_count": 18
+         }, {
+            "date_added": "13286081130470546",
+            "date_last_used": "0",
+            "guid": "b84baf12-1374-4249-bb63-53b71f02dcac",
+            "id": "15",
+            "name": "Dịch",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://translate.google.com/",
+            "visit_count": 0
+         }, {
+            "date_added": "13376495056224963",
+            "date_last_used": "0",
+            "guid": "9f53a8b9-2087-42b1-af95-3679cdc92fd1",
+            "id": "16",
+            "name": "FE never die · LobeChat",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://ai.asakuri.tech/chat?session=49285833-2293-40af-9e2e-d60e1748eb55",
+            "visit_count": 0
+         }, {
+            "date_added": "13375898683296276",
+            "date_last_used": "13376038975511520",
+            "guid": "cf1a5f50-09bc-4577-b987-50f1b8af23aa",
+            "id": "17",
+            "meta_info": {
+               "power_bookmark_meta": ""
+            },
+            "name": "DoanVanDu-2180606750/DACN_FL",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://github.com/DoanVanDu-2180606750/DACN_FL",
+            "visit_count": 3
+         }, {
+            "date_added": "13345660210564624",
+            "date_last_used": "0",
+            "guid": "d0d4c2c9-78b9-4bd0-822e-41d8703aa382",
+            "id": "18",
+            "meta_info": {
+               "power_bookmark_meta": ""
+            },
+            "name": "Quyền truy cập từ xa - Chrome Remote Desktop",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://remotedesktop.google.com/access?pli=1",
+            "visit_count": 0
+         }, {
+            "date_added": "13353487784199607",
+            "date_last_used": "13372528375414092",
+            "guid": "b5f3fdf6-1954-4e5c-80dc-24753f5e6373",
+            "id": "19",
+            "meta_info": {
+               "power_bookmark_meta": ""
+            },
+            "name": "HUTECH | SINH VIEN",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://sinhvien.hutech.edu.vn/#/sinhvien/hoc-vu/thoi-khoa-bieu",
+            "visit_count": 2
+         }, {
+            "children": [ {
+               "date_added": "13376703042998802",
+               "date_last_used": "0",
+               "guid": "4149c3f6-306d-46f6-9450-ba3cb7de7ec8",
+               "id": "21",
+               "name": "Lenovo Support",
+               "show_icon": false,
+               "source": "import_fre",
+               "type": "url",
+               "url": "http://support.lenovo.com/",
+               "visit_count": 0
+            }, {
+               "date_added": "13376703042998802",
+               "date_last_used": "0",
+               "guid": "92cfd6c1-df72-4915-ac15-7e9592aee627",
+               "id": "22",
+               "name": "Lenovo",
+               "show_icon": false,
+               "source": "import_fre",
+               "type": "url",
+               "url": "http://www.lenovo.com/",
+               "visit_count": 0
+            } ],
+            "date_added": "13376814514598583",
+            "date_last_used": "0",
+            "date_modified": "13376814515614706",
+            "guid": "de14d900-1c69-4ba3-9390-a793af778114",
+            "id": "20",
+            "name": "Lenovo",
+            "source": "unknown",
+            "type": "folder"
+         } ],
+         "date_added": "13376814510381710",
+         "date_last_used": "0",
+         "date_modified": "13376495056224963",
+         "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
+         "id": "1",
+         "name": "Favorites bar",
+         "source": "unknown",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13376814510381712",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Other favorites",
+         "source": "unknown",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [ {
+            "date_added": "13289167950038630",
+            "date_last_used": "0",
+            "guid": "34efb357-941c-49de-abe3-a59b3207c140",
+            "id": "9",
+            "name": "Cổng Thông Tin Đào Tạo-Trường Đại Học Công Nghệ TP.HCM-KTCN",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "http://daotao.hutech.edu.vn/default.aspx?page=thoikhoabieu&sta=1",
+            "visit_count": 0
+         }, {
+            "date_added": "13293604463531370",
+            "date_last_used": "0",
+            "guid": "9fb186c0-ad63-41c7-99b9-2defb964784d",
+            "id": "10",
+            "name": "Thẻ mới",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "chrome://newtab/",
+            "visit_count": 0
+         }, {
+            "date_added": "13370192979917787",
+            "date_last_used": "0",
+            "guid": "46b12e4f-1444-403c-8ee1-64779c7d20bb",
+            "id": "11",
+            "meta_info": {
+               "power_bookmark_meta": ""
+            },
+            "name": "💻 js.vd · LobeChat",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "https://ai.asakuri.tech/chat?session=e55e2003-0fee-482d-bb95-594ee404f00b&agent=&topic=vROA50GI",
+            "visit_count": 1
+         }, {
+            "date_added": "13370193064203978",
+            "date_last_used": "0",
+            "guid": "1a46d1e6-bada-43f1-8947-95d124a2c497",
+            "id": "12",
+            "meta_info": {
+               "power_bookmark_meta": ""
+            },
+            "name": "New tab",
+            "show_icon": false,
+            "source": "sync",
+            "type": "url",
+            "url": "edge://newtab/",
+            "visit_count": 1
+         } ],
+         "date_added": "13376814510381714",
+         "date_last_used": "0",
+         "date_modified": "13370193064203978",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Mobile favorites",
+         "source": "unknown",
+         "type": "folder"
+      }
+   },
+   "sync_metadata": "CjEKDgiIgQISCBGuG06TAQAAEgAqGFhwSG0wTUkwcnZmZVBRQjFSZGp0Rmc9PUgDoAYHEq0BCBYSqAEKHFF1SUIxMEhZcEMxZHEvS2pzenBId1NWY1FLbz0SJDkyY2ZkNmMxLWRmNzItNDkxNS1hYzE1LTdlOTU5MmFlZTYyNxgAIAAoADCjxNTttDI4k8bU7bQyQJPG1O20Mkocb0wzQ05OblJoVDNtRCtaT2hlYlVZWmw4TnVVPVofIh2gMXJlOUV4N2dBa0JGZkkvWkc5cEgyTXVad2UwPWUAAAAAwj4CYAISrgEIFBKpAQocUG5oYW5xOVllQTJSd3dFdzlQdjIrUnJBMGxnPRIkZGUxNGQ5MDAtMWM2OS00YmEzLTkzOTAtYTc5M2FmNzc4MTE0GAAgACgAMKHE1O20MjjZxdTttDJA2cXU7bQyShxvVUdCRWVhdWMwSCtoUFh5NXY5SC9zQldMRXc9WiAiHv+6NDkwVWhkVzdQK2hnSCtPSjNwcU5WM0Z5UGRzPWUAAAAAwj4CYAASrQEIExKoAQocRGwxaEY4SDB0enhvNldPaVczVGt2VU85bXFNPRIkYjVmM2ZkZjYtMTk1NC00ZTVjLTgwZGMtMjQ3NTNmNWU2MzczGAAgAigAMKqGi+izMjisk7zJ3jFApLvCvLUyShxhd01iSW1ML2Fza2M2OHVKaHBWN0g0S3BwM1U9Wh8iHf91SVFUdlRuRHZkM1RuTGRnNzJweWxwSzgxQnc9ZVyz1FbCPgJgBRKtAQgSEqgBChxscFdtNGNPam05YWdCMk83YjVlaXpEcVlkeUE9EiRkMGQ0YzJjOS03OGI5LTRiZDAtODIyZS00MWQ4NzAzYWEzODIYACACKAAwrIaL6LMyOPXe/rTBMUCju8K8tTJKHFhaZ2xxTVRmNlNNaXpGOHlrd3hpZmdQKzc0UT1aHyId9EN2YnhqcTBRdGtNb2NzZXNyNGhrMWpOUEJUUT1lvuyAk8I+AmAFEqwBCBUSpwEKHFdmSTNwUVNlMnJvcUloYi9CQStsblRmeWtwcz0SJDQxNDljM2Y2LTMwNmQtNDZmNi05NDUwLWJhM2NiN2RlN2VjOBgAIAAoADCixNTttDI498XU7bQyQPfF1O20MkocVkNjbjN6YVpqckE0S05qR3FpR2dleUt2M25ZPVoeIhxBT0ZZdnMwVHduTXltaGxxNnZRTDVKNm5NUGc9ZQAAAADCPgJgAhKsAQgMEqcBChxITGlvR24wS1p6Vk44MGxtdXdYZGxVS0ZUYm89EiQxYTQ2ZDFlNi1iYWRhLTQzZjEtODk0Ny05NWQxMjRhMmM0OTcYACAAKAAwzaaV55wyOM2nleecMkDNp5XnnDJKHGIyT0l6UE9NS1lGQVN0QWRIeXdOZGpCbGt1QT1aHiIca2xtNG9oU2pwTTBmdUY3MVJPMGtydjErUE5JPWXYr7ACwj4CYAUSrQEIEBKoAQocbWo4V1NwbGNxTGIyeXlYZ0dodmJtcWIydVZNPRIkOWY1M2E4YjktMjA4Ny00MmIxLWFmOTUtMzY3OWNkYzkyZmQxGAAgAigAMLnOmKS0MjjOrJiktDJAo7vCvLUyShxpQ1JJVTljYUV4MngxNzgwNGxjSDA3TlkzaGs9Wh8iHex0VmpYRVhiNzRuK3d0U21ibGdrVlFRNVNxZG89ZQohOIrCPgJgBRKOAQgBEokBChx5eEovNmZ2a2VjcjdrcDVFUXpCNHRXTHBkYkU9EiRiYmRiZDY3Yi1kYTI0LTVlOWYtYTMyMC0zYjUwYjBiNGNjOGMYACAAKAAww4Hop7MwON3r0pT/L0Dd69KU/y9KHGFSQ1dMZ2hGOWI1SW5xS0lEdnVKL2p2UWtGYz1aAGUAAAAAwj4CYAASjgEIAhKJAQocWWNTVG9udkVTUHdxQ3M0TDJjclZodjY4TDk4PRIkZjkyODYyY2YtZmQ5ZC01MGQ4LWJlZjctNTRhNzY1ZDk4ODAxGAAgACgAMMOB6KezMDj869KU/y9A/OvSlP8vShxvUFZraHdCUmJWNjVLQ1dSMitJT05IV29PdTg9WgBlAAAAAMI+AmAAEq0BCBESqAEKHE5jSU5BZG84Ymk1bFRDWlVjend5N2svR0d2TT0SJGNmMWE1ZjUwLTA5YmMtNDU3Ny1iOTg3LTUwZjFiOGFmMjNhYRgAIAIoADD9jOaStDI44dDoh7IyQKO7wry1MkocMEUxdWIvWHRwdnZON01CL0NYcEM0NEQrZFZZPVofIh3xa1JjcnFqc3VlTWp3cWxyaTlXc21hL21nRFk0PWXI8z+7wj4CYAUSrAEICRKnAQocandSNGFreG5ldkVhN0lxVjg1Ky8xZEVZc1JRPRIkMzRlZmIzNTctOTQxYy00OWRlLWFiZTMtYTU5YjMyMDdjMTQwGAAgACgAMJqD847sMDibhPOO7DBAm4TzjuwwShx1bmNxVncxQmh1OWxGRkpiL0VsOFlyQm9wZmc9Wh4iHDNLaUxqVTlaTE0vaGFBUDY5ZlU2Qk5POURzTT1lONuEx8I+AmAFEo4BCAMSiQEKHG5qZ0R1ODhlQ3J2WHA4NnBEN2ZIR2NxRnA4OD0SJGEyM2I0Y2EyLTFlZDYtNWI4NS1iYTlhLWViYzQ4ODQxZTBmZBgAIAAoADDDgeinszA4zevSlP8vQM3r0pT/L0oceXpOQjAxY241NEE3Y1JVMHVUKy9QZ21UdFVvPVoAZQAAAADCPgJgABKtAQgPEqgBChxNK3VMUUFSbFp4aVpLUnpWYnpGa09NRmdGSGM9EiRiODRiYWYxMi0xMzc0LTQyNDktYmI2My01M2I3MWYwMmRjYWMYACACKAAwrYaL6LMyOLqE847sMECiu8K8tTJKHFlwYmhMS2V5WW9OaVNOQ0Mybm5GcnRicFNqcz1aHyId6DRZN20vQUdnUlRRczI3RHdxenpIbUZJV0pJbz1lxc+QAcI+AmAFEqwBCAoSpwEKHHhacnZPd2lsT0hFdFkyUFRPU1BoY2tqMW5nQT0SJDlmYjE4NmMwLWFkNjMtNDFjNy05OWI5LTJkZWZiOTY0Nzg0ZBgAIAAoADCdg/OO7DA4mIXzjuwwQJiF847sMEoceTN3eFJvaU9BSE9FcGVvakh5eXFBTXlQM3U4PVoeIhxlRGZiQnZ4SmRJMGNPZUNlRUNFUW1LdEVWanc9ZQAAAADCPgJgBRKtAQgOEqgBChxialRtVkE1bkQ5R0dqY3VsNG40UE1UTkEvejQ9EiQ4Mzc2OTYxYy0xMTkyLTQwZWQtYTEwNC1hYzQ0ZDUyMzQ0ZDcYACACKAAwkNzu8LQyOIuE847sMECiu8K8tTJKHCtQczczdzJ1U01LWVFWSU1Cc3dYK1ZNMEQ2Zz1aHyIdojBESjBMZnByOTBWemhkUEU2YzJaQnhqd2FtVT1l/ZyMSsI+AmAFEqwBCAsSpwEKHEZ4dmtpM1JnZ2NGa2tLV09kYzFHYUlydjdkVT0SJDQ2YjEyZTRmLTE0NDQtNDAzYy04ZWUxLTY0Nzc5YzdkMjBiYhgAIAAoADDYk5DnnDI4npWQ55wyQJ6VkOecMkocUWtXVXJEL01zbk9rU3diQi8yQkZLMU9sM0RnPVoeIhxlaUpIQnBlL1VKZEtOc0JZWDdGM0FxbTU2S2c9ZQohOIrCPgJgBRKsAQgNEqcBChxXODFZR2VhY1NQWHBaWmUxeG5uRHJLaWd3ZUE9EiRlZGZmOTBlOS03NTFhLTRhYWQtOTk1YS0wMDg0MWRiZTc2Y2UYACACKAAwr4aL6LMyOOyD847sMECiu8K8tTJKHFNOckhSK3ZTM3dwek82c0hvNkgydU9qanhTWT1aHiIcRE5kNTg0OFdpblZ1c1Rjbmxuc3hRVFpGSXZZPWWbPYW2wj4CYAUwADgA",
+   "version": 1
+}

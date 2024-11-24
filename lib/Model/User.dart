@@ -1,4 +1,3 @@
-
 class User {
   final UserName name;
   final String email;
