@@ -13,15 +13,17 @@
       <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/5a40be1211da3e1df7e8aaf6a531f47e/kernel_snapshot_program.stamp" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/5a40be1211da3e1df7e8aaf6a531f47e/kernel_snapshot_program.stamp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/flutter_build/5a40be1211da3e1df7e8aaf6a531f47e/program.dill" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/flutter_build/5a40be1211da3e1df7e8aaf6a531f47e/program.dill" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/env.json" beforeDir="false" afterPath="$PROJECT_DIR$/env.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Providers/weatherData.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Providers/weatherData.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Model/body_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Model/body_model.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Providers/bodyProvider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Providers/bodyProvider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Screen/BodyDetails.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Screen/BodyDetails.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Screen/DietDetails.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Screen/DietDetails.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Screen/HeartDetails.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Screen/HeartDetails.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/Screen/Home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Screen/Home.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Widgets/info_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Widgets/info_card.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Widgets/weatherhome_card.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Service/bodyAI_api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Service/bodyAI_api.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Service/weather_aip.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Service/weather_aip.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

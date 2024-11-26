@@ -9,9 +9,9 @@ class WeatherService {
   Future<WeatherData?> fetchWeather() async {
     // Request location
     Position position = await _determinePosition();
+    print(position);
 
     if (position != null) {
-      print(position);
 //       final response = await http.get(
 // Uri.parse("https://api.openweathermap.org/data/2.5/weather?lat=10.863290&lon=106.728592&appid=befe89839e80e0a7c1ecdf5708af00ab"),
 // );

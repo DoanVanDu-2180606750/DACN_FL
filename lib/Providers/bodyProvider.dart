@@ -1,65 +1,37 @@
-import 'dart:convert';
-
+import 'package:fit_25/Service/bodyAI_api.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:fit_25/Model/body_model.dart';
 
-class UserInfoProvider with ChangeNotifier {
-  double _height = 0.0;
-  double _weight = 0.0;
+class BodyProvider with ChangeNotifier {
+  BodyInfo? _bodyInfo;
   String _aiAdvice = "Nhập đầy đủ thông tin";
   bool _isLoading = false;  // Track loading state
 
-  double get height => _height;
-  double get weight => _weight;
+  BodyInfo? get bodyInfo => _bodyInfo;
   String get aiAdvice => _aiAdvice;
   bool get isLoading => _isLoading;
 
+  final BodyService _bodyService = BodyService();
+
   void updateUserInfo(double height, double weight) {
-    _height = height;
-    _weight = weight;
-    notifyListeners();
+    _bodyInfo = BodyInfo(height: height, weight: weight); // Assume a constructor in BodyInfo
+    notifyListeners(); // Notify listeners of user info update
   }
 
-  Future<void> fetchAIAdvice(String height, String weight) async {
-    _isLoading = true;
-    notifyListeners();  // Notify listeners to show loading state
-
-    final url = Uri.parse(
-        'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDvh0xxPUrEu3rwChoKm4C0G7dGKpy7FN4');
-
-    final headers = {
-      'Content-Type': 'application/json',
-    };
-
-    final body = json.encode({
-      'contents': [
-        {
-          'parts': [
-            {
-              'text': " Tôi cao: $height m và cân nặng: $weight kg, tính chỉ số BMI và đưa ra nhận xét Và cho tôi. V iết khoảng 4 câu thôi.",
-            }
-          ]
-        }
-      ]
-    });
+  Future<void> fetchAIAdvice(double height, double weight) async {
+    _isLoading = true; // Set loading to true
+    notifyListeners(); // Notify listeners to show loading state
 
     try {
-      final response = await http.post(url, headers: headers, body: body);
-      if (response.statusCode == 200) {
-        print('cái này là cái đầu tiên nà: ${response.body} chấm hết ở đây nhaaaaaaaaaaaa');
-        final responseData = json.decode(response.body);
-        print(responseData);
-        // Extract the AI response from the response
-        _aiAdvice = responseData['candidates'][0]['content']['parts'][0]['text'] ?? "No advice returned";
-        print(_aiAdvice);
-      } else {
-        _aiAdvice = "Failed to get AI advice.";
-      }
+      // Call the BodyService to fetch AI advice
+      await _bodyService.fetchAiAdvice(height, weight); // Assuming this method accepts height and weight
+      // Retrieve the AI advice from the BodyService
+      _aiAdvice = _bodyService.aiAdvice!; // Get AI advice from BodyService
     } catch (error) {
-      _aiAdvice = "An error occurred: $error";
+      _aiAdvice = "An error occurred while fetching advice: $error";
+    } finally {
+      _isLoading = false; // Set loading to false
+      notifyListeners(); // Notify listeners to update UI
     }
-
-    _isLoading = false;  // Set loading to false when request is done
-    notifyListeners();  // Notify listeners to stop loading
   }
 }

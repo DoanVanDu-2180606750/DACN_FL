@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class DietSreen extends StatefulWidget {
-  const DietSreen({super.key});
+class DietScreen extends StatefulWidget {
+  const DietScreen({super.key});
 
   @override
-  State<DietSreen> createState() => _DietSreenState();
+  State<DietScreen> createState() => _DietSreenState();
 }
 
-class _DietSreenState extends State<DietSreen> {
+class _DietSreenState extends State<DietScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

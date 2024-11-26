@@ -1,3 +1,4 @@
+import 'package:fit_25/Providers/StepsProvider.dart';
 import 'package:fit_25/Providers/bodyProvider.dart';
 import 'package:fit_25/Providers/timeProvider.dart';
 import 'package:fit_25/Providers/weatherData.dart';
@@ -19,8 +20,10 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => TimeProvider()),
-        ChangeNotifierProvider(create: (context) => UserInfoProvider()),
-        ChangeNotifierProvider(create: (context) => WeatherProvider()) // Thêm aqui
+        ChangeNotifierProvider(create: (context) => BodyProvider()),
+        ChangeNotifierProvider(create: (context) => WeatherProvider()),
+        ChangeNotifierProvider(create: (context) => BodyProvider()),
+        ChangeNotifierProvider(create: (context) => StepsProvider())
       ],
       child: const MyApp(),
     ),

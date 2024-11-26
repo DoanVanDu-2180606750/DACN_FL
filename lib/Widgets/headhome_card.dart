@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class WeatheHome extends StatelessWidget {
+class HeadHome extends StatelessWidget {
   final String formattedDate;
   final String formattedTime;
 
-  const WeatheHome({
+  const HeadHome({
     super.key,
     required this.formattedDate,
     required this.formattedTime,

@@ -1,18 +1,20 @@
-import 'package:fit_25/Providers/bodyProvider.dart';
+import 'package:fit_25/Providers/StepsProvider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:fit_25/Providers/bodyProvider.dart';// Nhập provider cho bước
 import 'package:fit_25/Providers/timeProvider.dart';
 import 'package:fit_25/Screen/BodyDetails.dart';
 import 'package:fit_25/Screen/DietDetails.dart';
 import 'package:fit_25/Screen/HeartDetails.dart';
 import 'package:fit_25/Screen/More.dart';
 import 'package:fit_25/Screen/ChatAI.dart';
+import 'package:fit_25/Screen/StepsDetail.dart';
 import 'package:fit_25/Screen/Weather.dart';
 import 'package:fit_25/Widgets/headhome_card.dart';
 import 'package:fit_25/Widgets/info_card.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart'; 
+import 'package:fit_25/Model/steps_model.dart';
 
-// Khai báo lớp MyHomePage kế thừa StatefulWidget
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
@@ -21,7 +23,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool _isLoading = true;
   int _selectedIndex = 0;
 
   // Phương thức gọi khi người dùng chọn một mục trong BottomNavigationBar
@@ -33,18 +34,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // Phương thức xây dựng widget giao diện người dùng
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        // Tạo AppBar cho phần đầu của trang
         backgroundColor: Colors.white,
         elevation: 0,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'logo', // Nhiệt độ hiện tại
+              'logo',
               style: TextStyle(fontSize: 15, color: Colors.grey[700]),
             ),
           ],
@@ -96,6 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // Phương thức cho giao diện chính
   Widget _buildHome() {
     final timeProvider = Provider.of<TimeProvider>(context);
+    final stepsProvider = Provider.of<StepsProvider>(context); // Lấy StepsProvider
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -107,21 +107,21 @@ class _MyHomePageState extends State<MyHomePage> {
               Column(
                 children: [
                   Center(
-                    child: WeatheHome(
+                    child: HeadHome(
                       formattedDate: DateFormat('EEEE d, MMMM yyyy').format(DateTime.now()),
                       formattedTime: timeProvider.formattedTime,
                     ),
                   ),
                 ],
               ),
-              const SizedBox( width: 30 ),
+              const SizedBox(width: 30),
               const Column(
                 children: [
                   Center(
                     child: Text(
                       'Huỳnh Đạo',
                       style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-                    )
+                    ),
                   ),
                 ],
               ),
@@ -132,54 +132,53 @@ class _MyHomePageState extends State<MyHomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Consumer<UserInfoProvider>(
+              Consumer<BodyProvider>(
                 builder: (context, userInfoProvider, child) {
                   return InfoCard(
                     title: 'Weight',
-                    data: '${userInfoProvider.weight} kg',
+                    data: '${userInfoProvider.bodyInfo?.weight} kg',
                     color: Colors.green,
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => UserInfoScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => BodyScreen()));
                     },
                   );
                 },
               ),
-              Consumer<UserInfoProvider>(
+              Consumer<BodyProvider>(
                 builder: (context, userInfoProvider, child) {
                   return InfoCard(
                     title: 'Height',
-                    data: '${userInfoProvider.height} m',
+                    data: '${userInfoProvider.bodyInfo?.height} m',
                     color: Colors.green,
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => BodyScreen()));
+                    },
                   );
                 },
               ),
             ],
           ),
           const SizedBox(height: 10),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               InfoCard(
                 title: 'Steps',
-                data: '867/6000',
+                data: '${stepsProvider.stepData.currentSteps} / ${stepsProvider.stepData.targetSteps}', // Cập nhật số bước
                 color: Colors.green,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const StepsDetailsScreen()));
+                },
               ),
               InfoCard(
                 title: 'Calories burnt',
-                data: '256',
+                data: '256', // Cần cập nhật logic tính calories tương tự như cho steps
                 color: Colors.red,
                 onTap: () {},
               ),
             ],
           ),
           const SizedBox(height: 10),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -188,12 +187,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 data: '89 BPM',
                 color: Colors.green,
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const HeartSceen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const HeartScreen()));
                 },
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DietSreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DietScreen()));
                 },
                 child: Container(
                   height: 80,
