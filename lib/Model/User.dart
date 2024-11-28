@@ -3,11 +3,13 @@ class User {
   final String email;
   final String gender;
   final String phone;
+  final String address;
   User({
     required this.name,
     required this.email,
     required this.gender,
     required this.phone,
+    required this.address
   });
 }
  class UserName {

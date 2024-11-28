@@ -27,13 +27,12 @@ class StepsProvider with ChangeNotifier {
       targetSteps: _stepData.targetSteps,
       elapsedTime: _stepData.elapsedTime,
       runningSteps: _stepData.runningSteps + 1,
-      caloriesBurned: _calculateCalories(newSteps), // Tính calories
+      caloriesBurned: _calculateCalories(newSteps),
     );
     notifyListeners();
   }
 
   int _calculateCalories(int steps) {
-    // Giả định 0.04 calories cho mỗi bước
     return (steps * 0.04).toInt();
   }
 

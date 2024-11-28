@@ -13,35 +13,31 @@ class WeatherProvider with ChangeNotifier {
   String? get error => _error;
   bool get isLoading => _isLoading;
 
-  // Create an instance of WeatherService
   final WeatherService _weatherService = WeatherService();
 
-  // Fetch weather data asynchronously
   Future<void> fetchWeather() async {
-    _isLoading = true; // Set loading to true at the beginning
-    notifyListeners(); // Notify listeners for loading state change
+    _isLoading = true; 
+    notifyListeners();
 
     try {
-      // Fetch weather data from WeatherService
       _weatherData = await _weatherService.fetchWeather();
-      _error = null; // Reset error if fetching is successful
+      _error = null; 
     } catch (e) {
-      _error = e.toString(); // Set error message
+      _error = e.toString(); 
     } finally {
-      _isLoading = false; // Set loading to false at the end
-      notifyListeners(); // Notify listeners again to update UI
+      _isLoading = false; 
+      notifyListeners(); 
     }
   }
 
-  // Start automatic refreshing of weather data
+ 
   void startAutoRefreshing() {
-    _timer?.cancel(); // Cancel the old timer if exists
+    _timer?.cancel(); 
     _timer = Timer.periodic(const Duration(minutes: 10), (timer) {
-      fetchWeather(); // Fetch weather data periodically
+      fetchWeather(); 
     });
   }
 
-  // Stop automatic refreshing
   void stopAutoRefreshing() {
     _timer?.cancel();
   }

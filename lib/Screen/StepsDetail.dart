@@ -101,30 +101,6 @@ List<int> weeklyCalories = [60, 128, 180, 244, 288, 340, 380]; // Dữ liệu ca
     final elapsedSeconds = stepData.elapsedTime.inSeconds.remainder(60).toString().padLeft(2, '0');
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(
-              radius: 25,
-              child: Center(
-                child: Text(
-                  'J',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
       body: SingleChildScrollView( // Thay đổi tại đây để cho phép cuộn
         child: Padding(
           padding: const EdgeInsets.all(16.0),

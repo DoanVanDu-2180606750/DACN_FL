@@ -1,21 +1,21 @@
 class BodyInfo {
-  double height; // Height in meters
-  double weight; // Weight in kilograms
+  double height; 
+  double weight; 
 
   BodyInfo({
     required this.height,
     required this.weight,
   });
 
-  // Method to calculate BMI
+
   double calculateBMI() {
     if (height <= 0) {
-      throw ArgumentError('Height must be greater than 0.');
+      throw ArgumentError('Chiều cao phải lớn hơn không 0.');
     }
     if (weight <= 0) {
-      throw ArgumentError('Weight must be greater than 0.');
+      throw ArgumentError('Cân nặng phải lớn hơn không 0.');
     }
-    return weight / (height * height); // BMI formula: weight (kg) / (height (m) * height (m))
+    return weight / (height * height);
   }
 
   @override

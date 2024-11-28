@@ -10,8 +10,6 @@ class WeatherData {
   final int pressure;
   final int seaLevel;
   final List<WeatherInfo> weather;
-  // i have alreadt create a mode her according to my requirement you can also create mode according to your requiremnet
-  // if you need like my model all the source code are is in description. you can follow we me.
 
   WeatherData({
     required this.sys,
@@ -33,8 +31,8 @@ class WeatherData {
       temperature: Temperature.fromJson(json['main']['temp']),
       humidity: json['main']['humidity'],
       wind: Wind.fromJson(json['wind']),
-      maxTemperature: (json['main']['temp_max'] - 273.15), // Kelvin to Celsius
-      minTemperature: (json['main']['temp_min'] - 273.15), // Kelvin to Celsius
+      maxTemperature: (json['main']['temp_max'] - 273.15),
+      minTemperature: (json['main']['temp_min'] - 273.15),
       pressure: json['main']['pressure'],
       seaLevel: json['main']['sea_level'] ?? 0,
       weather: List<WeatherInfo>.from(
@@ -45,9 +43,6 @@ class WeatherData {
     );
   }
 }
-
-
-
 class WeatherInfo {
   final String main;
 

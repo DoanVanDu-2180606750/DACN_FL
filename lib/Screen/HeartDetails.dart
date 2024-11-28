@@ -23,7 +23,7 @@ class _HeartScreenState extends State<HeartScreen> {
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('Heart BPM Demo'),
+        title: const Center(child: Text('Đo Nhịp Tim')),
       ),
       body: Column(
         children: [
@@ -37,7 +37,6 @@ class _HeartScreenState extends State<HeartScreen> {
                       if (data.length >= 100) data.removeAt(0);
                       data.add(value);
                     });
-                    // chart = BPMChart(data);
                   },
                   onBPM: (value) => setState(() {
                     if (bpmValues.length >= 100) bpmValues.removeAt(0);
@@ -69,7 +68,7 @@ class _HeartScreenState extends State<HeartScreen> {
           Center(
             child: ElevatedButton.icon(
               icon: const Icon(Icons.favorite_rounded),
-              label: Text(isBPMEnabled ? "Stop measurement" : "Measure BPM"),
+              label: Text(isBPMEnabled ? "Dừng" : "Bắt đầu"),
               onPressed: () => setState(() {
                 if (isBPMEnabled) {
                   isBPMEnabled = false;

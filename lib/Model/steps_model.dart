@@ -1,5 +1,3 @@
-import 'dart:convert'; // import cho JSON
-import 'package:flutter/material.dart';
 
 class StepData {
   final int currentSteps; // Số bước hiện tại

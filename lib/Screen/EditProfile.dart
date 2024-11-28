@@ -1,89 +1,86 @@
+import 'package:fit_25/Model/User.dart';
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class ProfilePage extends StatefulWidget {
+  final User user;
+
+  const ProfilePage({super.key, required this.user});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  late TextEditingController _firstNameController;
+  late TextEditingController _lastNameController;
+  late TextEditingController _emailController;
+  late TextEditingController _phoneController;
+  late TextEditingController _addressController;
+  late TextEditingController _genderController;
+
+  @override
+  void initState() {
+    super.initState();
+    _firstNameController = TextEditingController(text: widget.user.name.first);
+    _lastNameController = TextEditingController(text: widget.user.name.last);
+    _emailController = TextEditingController(text: widget.user.email);
+    _phoneController = TextEditingController(text: widget.user.phone);
+    _addressController = TextEditingController(text: widget.user.address);
+    _genderController = TextEditingController(text: widget.user.gender);
+  }
+
+  void _saveProfile() {
+    final updatedUser = User(
+      name: UserName(
+        title: widget.user.name.title,
+        first: _firstNameController.text.trim(),
+        last: _lastNameController.text.trim(),
+      ),
+      email: _emailController.text.trim(),
+      gender: _genderController.text.trim(),
+      phone: _phoneController.text.trim(),
+      address: _addressController.text.trim(),
+    );
+
+    Navigator.pop(context, updatedUser);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(color: Colors.white), // Color of the title
-        ),
-        backgroundColor: const Color.fromARGB(255, 15, 12, 226), // Background color of AppBar
-      ),
+      appBar: AppBar(title: const Text('Chỉnh sửa thông tin')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Edit Your Profile Information',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            TextField(
+              controller: _firstNameController,
+              decoration: const InputDecoration(labelText: 'Tên'),
             ),
-            const SizedBox(height: 20), // Space between title and input fields
-
-            // Name Field
-            const Text('Name', style: TextStyle(fontSize: 16)),
-            const TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter your name',
-                border: OutlineInputBorder(),
-              ),
+            TextField(
+              controller: _lastNameController,
+              decoration: const InputDecoration(labelText: 'Họ'),
             ),
-
-            const SizedBox(height: 16), // Space between fields
-
-            // Phone Field
-            const Text('Phone', style: TextStyle(fontSize: 16)),
-            const TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter your phone number',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.phone,
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
             ),
-
-            const SizedBox(height: 16), // Space between fields
-
-            // Email Field
-            const Text('Email', style: TextStyle(fontSize: 16)),
-            const TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter your email',
-                border: OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.emailAddress,
+            TextField(
+              controller: _phoneController,
+              decoration: const InputDecoration(labelText: 'Số Điện Thoại'),
             ),
-
-            const SizedBox(height: 16), // Space between fields
-            
-            // Address Field
-            const Text('Address', style: TextStyle(fontSize: 16)),
-            const TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter your address',
-                border: OutlineInputBorder(),
-              ),
+            TextField(
+              controller: _addressController,
+              decoration: const InputDecoration(labelText: 'Địa chỉ'),
             ),
-
-            const Spacer(), // To push the button to the bottom of the page
-
-            // Save Button
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Handle save action here
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Profile updated')),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, // Button color
-                ),
-                child: const Text('Save Changes'),
-              ),
+            TextField(
+              controller: _genderController,
+              decoration: const InputDecoration(labelText: 'Giới tính'),
+            ),
+            const Spacer(),
+            ElevatedButton(
+              onPressed: _saveProfile,
+              child: const Text('Lưu'),
             ),
           ],
         ),

@@ -7,14 +7,13 @@ class TimeProvider with ChangeNotifier {
   Timer? _timer;
 
   TimeProvider() {
-    _updateTime(); // Khởi động để cập nhật thời gian ngay lập tức
+    _updateTime(); 
     startAutoRefreshing();
   }
 
   String get formattedTime => _formattedTime;
 
   void startAutoRefreshing() {
-    // Đặt timer để làm mới mỗi giây
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _updateTime();
     });
