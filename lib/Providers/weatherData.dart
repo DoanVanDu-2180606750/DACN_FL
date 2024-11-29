@@ -16,7 +16,7 @@ class WeatherProvider with ChangeNotifier {
   final WeatherService _weatherService = WeatherService();
 
   Future<void> fetchWeather() async {
-    _isLoading = true; 
+    _isLoading = false; 
     notifyListeners();
 
     try {

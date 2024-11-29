@@ -1,102 +1,142 @@
 
+import 'package:fit_25/Providers/heartProrvider.dart';
 import 'package:flutter/material.dart';
-import 'package:fit_25/Screen/BodyDetails.dart';
+import 'package:provider/provider.dart';
+import 'package:fit_25/Providers/weatherData.dart';
+import 'package:fit_25/Providers/StepsProvider.dart';
+import 'package:fit_25/Providers/bodyProvider.dart';
+import 'package:fit_25/Providers/timeProvider.dart';
 import 'package:fit_25/Screen/DietDetails.dart';
-import 'package:fit_25/Screen/HeartDetails.dart';
-import 'package:fit_25/Screen/More.dart';
-import 'package:fit_25/Screen/StepsDetail.dart';
-import 'package:fit_25/Screen/Weather.dart';
+import 'package:fit_25/Widgets/home_widget.dart';
+import 'package:fit_25/Widgets/weather_widget.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
+class HomeScreen extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  
-  int _selectedIndex = 0;
-
-  // List of the screens for each tab
-  static final List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    BodyScreen(),
-    const StepsDetailsScreen(),
-    const HeartScreen(),
-    const DietScreen(),
-    const UserScreen(),
-  ];
-
-  // Method to call when the user selects a tab from the BottomNavigationBar
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Load weather data after the first frame is built.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchWeatherData();
     });
+  }
+
+  Future<void> _fetchWeatherData() async {
+    final weatherProvider = Provider.of<WeatherProvider>(context, listen: false);
+    await weatherProvider.fetchWeather(); // Fetch weather data from provider
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          'logo',
-          style: TextStyle(fontSize: 15, color: Colors.grey),
-        ),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(
-              radius: 25,
-              child: Center(
-                child: Text(
-                  'J',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+    final weatherProvider = Provider.of<WeatherProvider>(context);
+    final timeProvider = Provider.of<TimeProvider>(context);
+    final stepsProvider = Provider.of<StepsProvider>(context);
+    final heartProvider = Provider.of<HeartRateProvider>(context);
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: RefreshIndicator(
+        onRefresh: _fetchWeatherData, // Call fetchWeather when refreshed
+        child: ListView( // Use ListView to enable scrolling
+          children: [
+            Column(
+              children: [
+                SizedBox(
+                  height: 105,
+                  child: Row(
+                    children: [
+                      Center(
+                        child: weatherProvider.isLoading // Check loading state
+                          ? const CircularProgressIndicator(color: Color.fromARGB(255, 255, 0, 0))
+                          : weatherProvider.error != null // Check for errors
+                              ? Text(
+                                  weatherProvider.error!, // Display error message
+                                  style: const TextStyle(color: Colors.red),
+                                )
+                              : weatherProvider.weatherData != null // Check if weatherData is not null
+                                  ? WeatherDetail(
+                                      weather: weatherProvider.weatherData!, // Access weather data
+                                    )
+                                  : const Text(
+                                      "Loading...", // Handle the null case while displaying
+                                      style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                                    ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ),
-        ],
-      ),
-      body: _widgetOptions[_selectedIndex], // Display the selected screen
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home'
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person), 
-            label: 'Body'
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.directions_walk), 
-            label: 'Walk'
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite), 
-            label: 'Heart'
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood), 
-            label: 'Diet'
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.more_horiz), 
-            label: 'More'
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.black,
+            const SizedBox(height: 20),
+            // Health Information - Info Cards
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                HomeWidget.buildInfoCard(
+                  'Weight', 
+                  '${context.watch<BodyProvider>().bodyInfo?.weight ?? 'N/A'} kg',
+                ),
+                HomeWidget.buildInfoCard(
+                  'Height', 
+                  '${context.watch<BodyProvider>().bodyInfo?.height ?? 'N/A'} m', 
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                HomeWidget.buildInfoCard(
+                  'Steps',
+                  '${stepsProvider.stepData.currentSteps} / ${stepsProvider.stepData.targetSteps}',
+                ),
+                HomeWidget.buildInfoCard(
+                  'Nhịp tim / phút',
+                  heartProvider.averageBPM.toStringAsFixed(0),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                HomeWidget.buildInfoCard(
+                  'Calories burned',
+                  '${stepsProvider.stepData.caloriesBurned}',
+                  color: const Color.fromARGB(255, 30, 213, 82),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const DietScreen()));
+                  },
+                  child: Container(
+                    height: 80,
+                    width: (MediaQuery.of(context).size.width / 2) - 20,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: const Color.fromARGB(255, 41, 58, 205),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'sds',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-

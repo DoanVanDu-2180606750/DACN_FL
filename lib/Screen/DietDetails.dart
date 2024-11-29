@@ -1,3 +1,5 @@
+
+import 'package:fit_25/Screen/Home.dart';
 import 'package:flutter/material.dart';
 
 class DietScreen extends StatelessWidget {
@@ -40,6 +42,10 @@ class DietScreen extends StatelessWidget {
           _buildDietPlanItem('Chế độ ăn thuần chay', 'Chỉ bao gồm thực phẩm từ thực vật.'),
         ],
       ),
+
+      floatingActionButton: FloatingActionButton(onPressed: (){
+      //  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      }),
     );
   }
 

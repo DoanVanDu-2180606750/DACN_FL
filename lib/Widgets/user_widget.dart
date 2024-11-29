@@ -1,7 +1,5 @@
 
-
 import 'package:flutter/material.dart';
-
 class UserWidget {
   static  infoRow(String title, String data) {
     return Padding(

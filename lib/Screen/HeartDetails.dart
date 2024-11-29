@@ -1,4 +1,6 @@
+import 'package:fit_25/Providers/heartProrvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:heart_bpm/chart.dart';
 import 'package:heart_bpm/heart_bpm.dart';
 
@@ -12,10 +14,10 @@ class HeartScreen extends StatefulWidget {
 class _HeartScreenState extends State<HeartScreen> {
   List<SensorValue> data = [];
   List<SensorValue> bpmValues = [];
-  //  Widget chart = BPMChart(data);
+  int totalBPM = 0;
+  int countBPM = 0;
 
   bool isBPMEnabled = false;
-  Widget? dialog;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class _HeartScreenState extends State<HeartScreen> {
       body: Column(
         children: [
           isBPMEnabled
-              ? dialog = HeartBPMDialog(
+              ? HeartBPMDialog(
                   context: context,
                   showTextValues: true,
                   borderRadius: 10,
@@ -40,15 +42,10 @@ class _HeartScreenState extends State<HeartScreen> {
                   },
                   onBPM: (value) => setState(() {
                     if (bpmValues.length >= 100) bpmValues.removeAt(0);
-                    bpmValues.add(SensorValue(
-                        value: value.toDouble(), time: DateTime.now()));
+                    bpmValues.add(SensorValue(value: value.toDouble(), time: DateTime.now()));
+                    totalBPM += value;
+                    countBPM++;
                   }),
-                  // sampleDelay: 1000 ~/ 20,
-                  // child: Container(
-                  //   height: 50,
-                  //   width: 100,
-                  //   child: BPMChart(data),
-                  // ),
                 )
               : const SizedBox(),
           isBPMEnabled && data.isNotEmpty
@@ -69,14 +66,43 @@ class _HeartScreenState extends State<HeartScreen> {
             child: ElevatedButton.icon(
               icon: const Icon(Icons.favorite_rounded),
               label: Text(isBPMEnabled ? "Dừng" : "Bắt đầu"),
-              onPressed: () => setState(() {
-                if (isBPMEnabled) {
-                  isBPMEnabled = false;
-                  // dialog.
-                } else {
-                  isBPMEnabled = true;
-                }
-              }),
+              onPressed: () {
+                setState(() {
+                  if (isBPMEnabled) {
+                    isBPMEnabled = false;
+                    double averageBPM = countBPM > 0 ? totalBPM / countBPM : 0;
+
+                    // Cập nhật provider với dữ liệu nhịp tim
+                    Provider.of<HeartRateProvider>(context, listen: false).updateHeartRate(
+                      averageBPM,
+                      bpmValues,
+                    );
+
+                    // Hiển thị kết quả
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text("Kết quả"),
+                        content: Text("Nhịp tim trung bình: ${averageBPM.toStringAsFixed(2)} BPM"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              totalBPM = 0;
+                              countBPM = 0;
+                              data.clear();
+                              bpmValues.clear();
+                            },
+                            child: const Text("Đóng"),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    isBPMEnabled = true;
+                  }
+                });
+              },
             ),
           ),
         ],

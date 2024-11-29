@@ -1,7 +1,6 @@
 // providers/steps_provider.dart
 import 'package:flutter/material.dart';
 import 'package:pedometer/pedometer.dart';
-
 import 'package:fit_25/Model/steps_model.dart';
 import 'package:fit_25/Service/StepsService.dart';
 
