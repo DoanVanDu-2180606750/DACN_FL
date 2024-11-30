@@ -4,6 +4,7 @@ import 'package:fit_25/Providers/heartProrvider.dart';
 import 'package:fit_25/Providers/timeProvider.dart';
 import 'package:fit_25/Providers/weatherData.dart';
 import 'package:fit_25/Screen/MainPage.dart';
+import 'package:fit_25/Screen/User.dart';
 import 'package:fit_25/Service/assets_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
@@ -37,9 +38,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  MyHomePage()
+      routes: {
+        '/user': (context) => const UserScreen(),
+      },
+      home:  const MyHomePage()
     );
   }
 }

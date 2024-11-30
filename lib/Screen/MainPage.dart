@@ -1,10 +1,11 @@
 
 import 'package:fit_25/Screen/Home.dart';
+import 'package:fit_25/Screen/User.dart';
 import 'package:flutter/material.dart';
 import 'package:fit_25/Screen/BodyDetails.dart';
 import 'package:fit_25/Screen/DietDetails.dart';
 import 'package:fit_25/Screen/HeartDetails.dart';
-import 'package:fit_25/Screen/More.dart';
+// import 'package:fit_25/Screen/More.dart';
 import 'package:fit_25/Screen/StepsDetail.dart';
 
 class MyHomePage extends StatefulWidget {

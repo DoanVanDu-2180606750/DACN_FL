@@ -1,5 +1,10 @@
-import 'package:fit_25/Model/User.dart';
+import 'dart:io';
+import 'package:fit_25/Model/user_mode.dart';
+import 'package:fit_25/Screen/User.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+
 
 class ProfilePage extends StatefulWidget {
   final User user;
@@ -11,75 +16,122 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late TextEditingController _firstNameController;
-  late TextEditingController _lastNameController;
+  late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _phoneController;
   late TextEditingController _addressController;
   late TextEditingController _genderController;
+  File? _image;
+
+  Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
+  }
+
+  Future<void> _putProfile() async {
+    final String url = 'http://192.168.1.6:8080/api/users/${widget.user.id}'; 
+    try {
+      var request = http.MultipartRequest('PUT', Uri.parse(url))
+        ..fields['name'] = _nameController.text
+        ..fields['email'] = _emailController.text
+        ..fields['phone'] = _phoneController.text
+        ..fields['address'] = _addressController.text
+        ..fields['gender'] = _genderController.text;
+
+      if (_image != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          'image',
+          _image!.path,
+        ));
+      }
+
+      final response = await request.send();
+
+      if (response.statusCode == 200) {
+        print('Profile updated');
+        Navigator.pop(context);
+      } else {
+        print('Failed to update profile: ${response.reasonPhrase}');
+      }
+    } catch (err) {
+      print('Error: $err');
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _firstNameController = TextEditingController(text: widget.user.name.first);
-    _lastNameController = TextEditingController(text: widget.user.name.last);
+    _nameController = TextEditingController(text: widget.user.name);
     _emailController = TextEditingController(text: widget.user.email);
     _phoneController = TextEditingController(text: widget.user.phone);
     _addressController = TextEditingController(text: widget.user.address);
     _genderController = TextEditingController(text: widget.user.gender);
   }
 
-  void _saveProfile() {
-    final updatedUser = User(
-      name: UserName(
-        title: widget.user.name.title,
-        first: _firstNameController.text.trim(),
-        last: _lastNameController.text.trim(),
-      ),
-      email: _emailController.text.trim(),
-      gender: _genderController.text.trim(),
-      phone: _phoneController.text.trim(),
-      address: _addressController.text.trim(),
-    );
-
-    Navigator.pop(context, updatedUser);
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _addressController.dispose();
+    _genderController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0;
     return Scaffold(
       appBar: AppBar(title: const Text('Chỉnh sửa thông tin')),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
-            TextField(
-              controller: _firstNameController,
-              decoration: const InputDecoration(labelText: 'Tên'),
+            if (!keyboardOpen && _image != null)
+              Container(
+                width: 100.0,
+                height: 100.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.0),
+                  image: DecorationImage(
+                    image: FileImage(_image!),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _pickImage,
+              child: Text('Chọn ảnh từ thư mục'),
             ),
-            TextField(
-              controller: _lastNameController,
-              decoration: const InputDecoration(labelText: 'Họ'),
+            TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(labelText: 'Họ và Tên'),
             ),
-            TextField(
+            TextFormField(
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email'),
             ),
-            TextField(
+            TextFormField(
               controller: _phoneController,
               decoration: const InputDecoration(labelText: 'Số Điện Thoại'),
             ),
-            TextField(
+            TextFormField(
               controller: _addressController,
               decoration: const InputDecoration(labelText: 'Địa chỉ'),
             ),
-            TextField(
+            TextFormField(
               controller: _genderController,
               decoration: const InputDecoration(labelText: 'Giới tính'),
             ),
             const Spacer(),
             ElevatedButton(
-              onPressed: _saveProfile,
+              onPressed: _putProfile,
               child: const Text('Lưu'),
             ),
           ],
