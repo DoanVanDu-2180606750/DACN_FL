@@ -15,6 +15,7 @@ migrate_working_dir/
 *.ipr
 *.iws
 .idea/
+.dart_tool/
 
 
 # The .vscode folder contains launch configuration and tasks you configure in
@@ -30,8 +31,6 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-.env
-.dart_tool/
 
 # Symbolication related
 app.*.symbols
