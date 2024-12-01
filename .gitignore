@@ -44,5 +44,3 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 .dart_tool/chrome-device/Default/arbitration_service_config.json
-flutter_01.png
-flutter_02.png

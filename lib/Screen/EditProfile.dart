@@ -1,18 +1,17 @@
+
 import 'dart:io';
-import 'package:fit_25/Model/user_mode.dart';
-import 'package:fit_25/Screen/User.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-
+import 'package:fit_25/Model/user_mode.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
 
-  const ProfilePage({super.key, required this.user});
+  const ProfilePage({Key? key, required this.user}) : super(key: key);
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
@@ -22,6 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late TextEditingController _addressController;
   late TextEditingController _genderController;
   File? _image;
+  bool _isLoading = false;
 
   Future<void> _pickImage() async {
     final ImagePicker _picker = ImagePicker();
@@ -30,13 +30,23 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         _image = File(image.path);
       });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No image selected.')),
+      );
     }
   }
 
+
   Future<void> _putProfile() async {
-    final String url = 'http://192.168.1.6:8080/api/users/${widget.user.id}'; 
+    final String url = 'http://192.168.1.6:8080/api/users/${widget.user.id}';
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       var request = http.MultipartRequest('PUT', Uri.parse(url))
+
         ..fields['name'] = _nameController.text
         ..fields['email'] = _emailController.text
         ..fields['phone'] = _phoneController.text
@@ -53,13 +63,23 @@ class _ProfilePageState extends State<ProfilePage> {
       final response = await request.send();
 
       if (response.statusCode == 200) {
-        print('Profile updated');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profile updated successfully!')),
+        );
         Navigator.pop(context);
       } else {
-        print('Failed to update profile: ${response.reasonPhrase}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to update profile: ${response.reasonPhrase}')),
+        );
       }
     } catch (err) {
-      print('Error: $err');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $err')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -130,10 +150,12 @@ class _ProfilePageState extends State<ProfilePage> {
               decoration: const InputDecoration(labelText: 'Giới tính'),
             ),
             const Spacer(),
-            ElevatedButton(
-              onPressed: _putProfile,
-              child: const Text('Lưu'),
-            ),
+            if (_isLoading) CircularProgressIndicator(),
+            if (!_isLoading)
+              ElevatedButton(
+                onPressed: _putProfile,
+                child: const Text('Lưu'),
+              ),
           ],
         ),
       ),

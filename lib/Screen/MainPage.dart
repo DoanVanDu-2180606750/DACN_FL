@@ -7,6 +7,8 @@ import 'package:fit_25/Screen/DietDetails.dart';
 import 'package:fit_25/Screen/HeartDetails.dart';
 // import 'package:fit_25/Screen/More.dart';
 import 'package:fit_25/Screen/StepsDetail.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});

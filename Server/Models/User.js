@@ -7,7 +7,10 @@ const userSchema = new mongoose.Schema({
     gender: { type: String, required: true },
     address: { type: String, required: true },
     phone: { type: String, required: true },
-    image: { type: String },
+    image: {
+        data: Buffer,
+        contentType: String,
+    }, // Lưu ảnh dưới dạng buffer với loại nội dung
 });
 
 const User = mongoose.model('User', userSchema);

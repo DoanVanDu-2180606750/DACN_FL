@@ -1,8 +1,15 @@
 import 'package:fit_25/Widgets/body_widget.dart';
 import 'package:flutter/material.dart';
 
-class BodyScreen extends StatelessWidget {
+class BodyScreen extends StatefulWidget {
+  @override
+  State<BodyScreen> createState() => _BodyScreenState();
+}
+
+class _BodyScreenState extends State<BodyScreen> {
+  
   final TextEditingController heightController = TextEditingController();
+
   final TextEditingController weightController = TextEditingController();
 
   @override

@@ -18,8 +18,6 @@ class _UserScreenState extends State<UserScreen> {
   @override
   void initState() {
     super.initState();
-    
-    // Gọi dữ liệu người dùng sau khi widget được xây dựng hoàn tất
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getUserData();
     });
@@ -36,15 +34,22 @@ class _UserScreenState extends State<UserScreen> {
           users = jsonData.map((e) => User.fromJson(e as Map<String, dynamic>)).toList();
         });
       } else {
-        print('Error: ${response.statusCode}');
+        setState(() {
+          users = [];
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to fetch data: ${response.reasonPhrase}')),
+        );
       }
     } catch (error) {
       print('Error fetching user data: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error fetching user data: $error')),
+      );
     }
   }
 
   Future<void> _refreshUserData() async {
-    // Gọi lại hàm để tải lại dữ liệu
     await _getUserData();
   }
 
@@ -53,14 +58,13 @@ class _UserScreenState extends State<UserScreen> {
       final updatedUser = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ProfilePage(user: users[0]), // Truyền user vào
+          builder: (context) => ProfilePage(user: users[0]),
         ),
       );
 
-      // Kiểm tra nếu chúng ta nhận dữ liệu về từ màn hình chỉnh sửa
       if (updatedUser != null) {
         setState(() {
-          users[0] = updatedUser; // Cập nhật thông tin người dùng
+          users[0] = updatedUser;
         });
       }
     }
@@ -69,7 +73,7 @@ class _UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     if (users.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: Text('Không có thông tin người dùng'));
     }
 
     final user = users[0];
@@ -83,8 +87,8 @@ class _UserScreenState extends State<UserScreen> {
             children: [
               CircleAvatar(
                 radius: 55,
-                backgroundImage: _getImageProvider(user.image), // Lấy provider ảnh
-                child: user.image == null ? const Icon(Icons.person) : null,
+                backgroundImage: user.image != null ? MemoryImage(user.image) : null,
+                child: user.image == null ? const Icon(Icons.person, size: 55) :  null,
               ),
               Text(
                 user.name ?? 'Tên không có sẵn',
@@ -112,15 +116,5 @@ class _UserScreenState extends State<UserScreen> {
         ),
       ),
     );
-  }
-
-  ImageProvider _getImageProvider(String? image) {
-    if (image == null || image.isEmpty) {
-      return const AssetImage('assets/images/User.jpg');
-    } else if (image.startsWith('http')) {
-      return NetworkImage(image);
-    } else {
-      return AssetImage(image);
-    }
   }
 }
