@@ -87,8 +87,10 @@ class _UserScreenState extends State<UserScreen> {
             children: [
               CircleAvatar(
                 radius: 55,
-                backgroundImage: user.image != null ? MemoryImage(user.image) : null,
-                child: user.image == null ? const Icon(Icons.person, size: 55) :  null,
+                backgroundImage: user.image != null 
+                    ? NetworkImage(user.image) // Sử dụng NetworkImage
+                    : null,
+                child: user.image == null ? const Icon(Icons.person, size: 55) : null,
               ),
               Text(
                 user.name ?? 'Tên không có sẵn',
