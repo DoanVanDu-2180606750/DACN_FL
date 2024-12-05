@@ -1,4 +1,5 @@
 
+import 'package:fit_25/Screen/FoodDetails.dart';
 import 'package:fit_25/Screen/Home.dart';
 import 'package:flutter/material.dart';
 
@@ -8,10 +9,6 @@ class DietScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Chế Độ Ăn Uống'),
-        centerTitle: true,
-      ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
@@ -23,12 +20,10 @@ class DietScreen extends StatelessWidget {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
-          _buildDietItem('Salad trái cây', 'Một lựa chọn nhẹ nhàng và bổ dưỡng.', Icons.restaurant),
-          _buildDietItem('Sinh tố xanh', 'Giàu vitamin và khoáng chất.', Icons.local_drink),
-          _buildDietItem('Gà nướng', 'Thực phẩm giàu protein.', Icons.local_fire_department),
-          _buildDietItem('Cá hồi nướng', 'Dinh dưỡng từ omega-3.', Icons.fastfood),
-          _buildDietItem('Yogurt tự nhiên', 'Tốt cho hệ tiêu hóa.', Icons.icecream),
-
+          _buildDietItem('Buổi sáng', 'Khởi đầu ngày mới với năng lượng lành mạnh.', Icons.breakfast_dining),
+          _buildDietItem('Buổi trưa', 'Bữa ăn chính giàu dưỡng chất.', Icons.lunch_dining),
+          _buildDietItem('Buổi chiều', 'Giúp cơ thể hồi phục với thực phẩm giàu protein.', Icons.fitness_center),
+          _buildDietItem('Buổi tối', 'Bổ sung dinh dưỡng nhẹ nhàng, dễ tiêu.', Icons.nightlife),
           // Tiêu đề phần
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -44,7 +39,7 @@ class DietScreen extends StatelessWidget {
       ),
 
       floatingActionButton: FloatingActionButton(onPressed: (){
-      //  Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+       Navigator.push(context, MaterialPageRoute(builder: (context) => CalorieScreen()));
       }),
     );
   }

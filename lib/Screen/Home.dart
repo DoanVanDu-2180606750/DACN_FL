@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:fit_25/Providers/weatherData.dart';
 import 'package:fit_25/Providers/StepsProvider.dart';
 import 'package:fit_25/Providers/bodyProvider.dart';
-import 'package:fit_25/Providers/timeProvider.dart';
 import 'package:fit_25/Screen/DietDetails.dart';
 import 'package:fit_25/Widgets/home_widget.dart';
 import 'package:fit_25/Widgets/weather_widget.dart';
@@ -33,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final weatherProvider = Provider.of<WeatherProvider>(context);
-    final timeProvider = Provider.of<TimeProvider>(context);
     final stepsProvider = Provider.of<StepsProvider>(context);
     final heartProvider = Provider.of<HeartRateProvider>(context);
 
@@ -62,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       weather: weatherProvider.weatherData!, // Access weather data
                                     )
                                   : const Text(
-                                      "Loading...", // Handle the null case while displaying
+                                      "Data Loading...", // Handle the null case while displaying
                                       style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                                     ),
                       ),
@@ -73,64 +71,89 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 20),
             // Health Information - Info Cards
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                HomeWidget.buildInfoCard(
-                  'Weight', 
-                  '${context.watch<BodyProvider>().bodyInfo?.weight ?? 'N/A'} kg',
+                const Text('Thông tin cơ thể', 
+                  style: TextStyle(fontSize: 25, color: Colors.black),
                 ),
-                HomeWidget.buildInfoCard(
-                  'Height', 
-                  '${context.watch<BodyProvider>().bodyInfo?.height ?? 'N/A'} m', 
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                HomeWidget.buildInfoCard(
-                  'Steps',
-                  '${stepsProvider.stepData.currentSteps} / ${stepsProvider.stepData.targetSteps}',
-                ),
-                HomeWidget.buildInfoCard(
-                  'Nhịp tim / phút',
-                  heartProvider.averageBPM.toStringAsFixed(0),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                HomeWidget.buildInfoCard(
-                  'Calories burned',
-                  '${stepsProvider.stepData.caloriesBurned}',
-                  color: const Color.fromARGB(255, 30, 213, 82),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const DietScreen()));
-                  },
-                  child: Container(
-                    height: 80,
-                    width: (MediaQuery.of(context).size.width / 2) - 20,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: const Color.fromARGB(255, 41, 58, 205),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    HomeWidget.buildInfoBodyCard(
+                      'Weight', 
+                      '${context.watch<BodyProvider>().bodyInfo?.weight ?? 'N/A'} kg',
                     ),
-                    child: const Center(
-                      child: Text(
-                        'sds',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                    HomeWidget.buildInfoBodyCard(
+                      'Height', 
+                      '${context.watch<BodyProvider>().bodyInfo?.height ?? 'N/A'} m', 
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Thông tin hoạt động',
+                style: TextStyle(fontSize: 25, color: Colors.black),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    HomeWidget.buildInfoActiCard(
+                      'Steps',
+                      '${stepsProvider.stepData.currentSteps} / ${stepsProvider.stepData.targetSteps}',
+                    ),
+                    HomeWidget.buildInfoActiCard(
+                      'Nhịp tim / phút',
+                      heartProvider.averageBPM.toStringAsFixed(0),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Thông tin năng lượng',
+                  style: TextStyle(fontSize: 25, color: Colors.black),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    HomeWidget.buildInfoActiCard(
+                      'Calories burned',
+                      '${stepsProvider.stepData.caloriesBurned}',
+                      color: const Color.fromARGB(255, 30, 213, 82),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        
+                      },
+                      child: Container(
+                        height: 80,
+                        width: (MediaQuery.of(context).size.width / 2) - 20,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: const Color.fromARGB(255, 41, 58, 205),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'sds',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),

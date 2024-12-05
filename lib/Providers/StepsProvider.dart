@@ -1,48 +1,30 @@
-// providers/steps_provider.dart
-import 'package:flutter/material.dart';
-import 'package:pedometer/pedometer.dart';
-import 'package:fit_25/Model/steps_model.dart';
-import 'package:fit_25/Service/StepsService.dart';
+import 'package:flutter/foundation.dart';
+
+class StepsData {
+  int currentSteps;
+  int targetSteps;
+  double caloriesBurned;
+
+  StepsData({
+    this.currentSteps = 0,
+    this.targetSteps = 5000, // Giá trị mặc định
+    this.caloriesBurned = 0.0,
+  });
+}
 
 class StepsProvider with ChangeNotifier {
-  StepData _stepData = StepData(currentSteps: 0, targetSteps: 8000, elapsedTime: Duration.zero, runningSteps: 0, caloriesBurned: 0);
-  final StepCounterService _stepCounterService = StepCounterService();
+  StepsData _stepData = StepsData();
 
-  StepsProvider() {
-    _initializeStepCountStream();
-  }
+  StepsData get stepData => _stepData;
 
-  StepData get stepData => _stepData;
-
-  void _initializeStepCountStream() {
-    _stepCounterService.stepCountStream.listen((StepCount event) {
-      _updateSteps(event.steps);
-    });
-  }
-
-  void _updateSteps(int newSteps) {
-    _stepData = StepData(
-      currentSteps: newSteps,
-      targetSteps: _stepData.targetSteps,
-      elapsedTime: _stepData.elapsedTime,
-      runningSteps: _stepData.runningSteps + 1,
-      caloriesBurned: _calculateCalories(newSteps),
-    );
+  void updateSteps(int newSteps) {
+    _stepData.currentSteps = newSteps;
+    _stepData.caloriesBurned = newSteps * 0.04;
     notifyListeners();
   }
 
-  int _calculateCalories(int steps) {
-    return (steps * 0.04).toInt();
-  }
-
-  void updateTargetSteps(int newTarget) {
-    _stepData = StepData(
-      currentSteps: _stepData.currentSteps,
-      targetSteps: newTarget,
-      elapsedTime: _stepData.elapsedTime,
-      runningSteps: _stepData.runningSteps,
-      caloriesBurned: _stepData.caloriesBurned,
-    );
+  void resetSteps() {
+    _stepData = StepsData();
     notifyListeners();
   }
 }

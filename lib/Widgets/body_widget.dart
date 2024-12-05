@@ -62,12 +62,6 @@ class BodyWidgets {
         // Clear input fields
         heightController.clear();
         weightController.clear();
-
-        // Show Snackbar to notify user
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Thông tin đã được lưu!"),
-          duration: Duration(seconds: 2),
-        ));
       },
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 16),

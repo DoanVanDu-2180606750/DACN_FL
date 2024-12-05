@@ -1,5 +1,8 @@
 
+import 'package:fit_25/Providers/loginProvider.dart';
+import 'package:fit_25/Screen/ChatAI.dart';
 import 'package:fit_25/Screen/Home.dart';
+import 'package:fit_25/Screen/Login.dart';
 import 'package:fit_25/Screen/User.dart';
 import 'package:flutter/material.dart';
 import 'package:fit_25/Screen/BodyDetails.dart';
@@ -7,8 +10,8 @@ import 'package:fit_25/Screen/DietDetails.dart';
 import 'package:fit_25/Screen/HeartDetails.dart';
 // import 'package:fit_25/Screen/More.dart';
 import 'package:fit_25/Screen/StepsDetail.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -18,6 +21,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  Future<void> _logout(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('loggedIn', false); // Đặt trạng thái đăng nhập là false
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()), // Quay lại trang đăng nhập
+    );
+  }
   
   int _selectedIndex = 0;
 
@@ -37,28 +49,24 @@ class _MyHomePageState extends State<MyHomePage> {
       _selectedIndex = index;
     });
   }
-
   @override
   Widget build(BuildContext context) {
+    final image = Provider.of<UserProvider>(context, listen: false).image;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          'logo',
-          style: TextStyle(fontSize: 15, color: Colors.grey),
-        ),
-        actions: const [
+        title: Image.asset('assets/Images/logo.png', height: 30),
+        actions: [
           Padding(
-            padding: EdgeInsets.only(right: 16.0),
+            padding: const EdgeInsets.only(right: 16.0),
             child: CircleAvatar(
               radius: 25,
               child: Center(
-                child: Text(
-                  'J',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
+                child: CircleAvatar(
+                  radius: 25,
+                  backgroundImage: NetworkImage('$image'),
+                )
               ),
             ),
           ),
@@ -98,6 +106,12 @@ class _MyHomePageState extends State<MyHomePage> {
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.black,
       ),
+
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.face_6, size: 30,),
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatScreen()));
+        }),
     );
   }
 }
