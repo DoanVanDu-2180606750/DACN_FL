@@ -1,4 +1,3 @@
-
 import 'package:fit_25/Providers/heartProrvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,80 +40,81 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefresh: _fetchWeatherData, // Call fetchWeather when refreshed
         child: ListView( // Use ListView to enable scrolling
           children: [
-            Column(
-              children: [
-                SizedBox(
-                  height: 105,
-                  child: Row(
-                    children: [
-                      Center(
-                        child: weatherProvider.isLoading // Check loading state
-                          ? const CircularProgressIndicator(color: Color.fromARGB(255, 255, 0, 0))
-                          : weatherProvider.error != null // Check for errors
-                              ? Text(
-                                  weatherProvider.error!, // Display error message
-                                  style: const TextStyle(color: Colors.red),
+            // Weather Information
+            SizedBox(
+              height: 105,
+              child: Row(
+                children: [
+                  Center(
+                    child: weatherProvider.isLoading
+                      ? const CircularProgressIndicator(color: Color.fromARGB(255, 255, 0, 0))
+                      : weatherProvider.error != null
+                          ? Text(
+                              weatherProvider.error!,
+                              style: const TextStyle(color: Colors.red),
+                            )
+                          : weatherProvider.weatherData != null
+                              ? WeatherDetail(
+                                  weather: weatherProvider.weatherData!,
                                 )
-                              : weatherProvider.weatherData != null // Check if weatherData is not null
-                                  ? WeatherDetail(
-                                      weather: weatherProvider.weatherData!, // Access weather data
-                                    )
-                                  : const Text(
-                                      "Data Loading...", // Handle the null case while displaying
-                                      style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                                    ),
-                      ),
-                    ],
+                              : const Text(
+                                  "Data Loading...",
+                                  style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                                ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const SizedBox(height: 20),
-            // Health Information - Info Cards
+            // Body Information - Info Cards
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Thông tin cơ thể', 
+                const Text(
+                  'Thông tin cơ thể',
                   style: TextStyle(fontSize: 25, color: Colors.black),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     HomeWidget.buildInfoBodyCard(
-                      'Weight', 
+                      'Weight',
                       '${context.watch<BodyProvider>().bodyInfo?.weight ?? 'N/A'} kg',
                     ),
                     HomeWidget.buildInfoBodyCard(
-                      'Height', 
-                      '${context.watch<BodyProvider>().bodyInfo?.height ?? 'N/A'} m', 
+                      'Height',
+                      '${context.watch<BodyProvider>().bodyInfo?.height ?? 'N/A'} m',
                     ),
                   ],
                 ),
               ],
             ),
             const SizedBox(height: 10),
+            // Activity Information
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Thông tin hoạt động',
-                style: TextStyle(fontSize: 25, color: Colors.black),
+                const Text(
+                  'Thông tin hoạt động',
+                  style: TextStyle(fontSize: 25, color: Colors.black),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    HomeWidget.buildInfoActiCard(
+                    HomeWidget.buildStepsCards(
                       'Steps',
-                      '${stepsProvider.stepData.currentSteps} / ${stepsProvider.stepData.targetSteps}',
+                      '${stepsProvider.stepData.currentSteps}',
                     ),
-                    HomeWidget.buildInfoActiCard(
-                      'Nhịp tim / phút',
-                      heartProvider.averageBPM.toStringAsFixed(0),
-                    ),
+                    HomeWidget.buildStepsCards(
+                      'Kcal',
+                      '${stepsProvider.stepData.caloriesBurned}',
+                      ),
                   ],
                 ),
               ],
             ),
             const SizedBox(height: 10),
+            // Energy Information
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -125,14 +125,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    HomeWidget.buildInfoActiCard(
-                      'Calories burned',
-                      '${stepsProvider.stepData.caloriesBurned}',
-                      color: const Color.fromARGB(255, 30, 213, 82),
-                    ),
                     GestureDetector(
                       onTap: () {
-                        
+                        // Add your onTap functionality here
                       },
                       child: Container(
                         height: 80,
@@ -143,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: const Center(
                           child: Text(
-                            'sds',
+                            'sds', // Replace with meaningful text
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,

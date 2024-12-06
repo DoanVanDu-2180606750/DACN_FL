@@ -66,8 +66,9 @@ class _ProfilePageState extends State<ProfilePage> {
     });
 
     try {
+      
       final userToken = Provider.of<UserProvider>(context, listen: false).token;
-      final requestUrl = 'http://10.17.18.247:8080/api/users/me';
+      final requestUrl = 'http://192.168.1.7:8080/api/users/me';
       
       var request = http.MultipartRequest('PUT', Uri.parse(requestUrl));
 
@@ -94,6 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
       // Gửi yêu cầu và nhận phản hồi
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
+      
       
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(

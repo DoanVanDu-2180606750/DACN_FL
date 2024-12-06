@@ -21,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
 
-    // Get registration success message from arguments
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?; 
       if (args != null && args['message'] != null) {
@@ -34,66 +34,57 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
 
-    String? errorMessage = _validateInputs(email, password);
-    if (errorMessage != null) {
-      _showSuccessMessage(errorMessage);
+    // Validate inputs
+    if (email.isEmpty || password.isEmpty) {
+      _showSuccessMessage('Email and password must not be empty.');
       return;
     }
 
     setState(() {
-      _isLoading = true; // Start loading
+      _isLoading = true;
     });
-    // Perform the login request
+
     try {
       final response = await http.post(
-        Uri.parse('http://10.17.18.247:8080/api/login'),
+        Uri.parse('http://192.168.1.7:8080/api/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'email': email, 'password': password}),
       );
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> jsonResponse = json.decode(response.body);
-        // Extract user data
+        final jsonResponse = json.decode(response.body);
+
         final userData = jsonResponse['user'];
-        final token = jsonResponse['token'];
+        final String token = jsonResponse['token'];
 
-        // Print for debugging
-        print('Login successful:'+ token.toString());
-
-        // Call setUserDetails with extracted values
+        // Get the UserProvider instance and update the user details
         Provider.of<UserProvider>(context, listen: false).setUserDetails(
-          userData['_id'],      // User ID
-          userData['name'],     // User name
-          userData['email'],    // User email
-          userData['role'],     // User role
-          userData['image'],
-          token,                // Login token
+          name: userData['name'],
+          email: userData['email'],
+          image: userData['image'], // Example: adjust based on the backend
+          isVerified: userData['isVerified'],
+          token: token,
         );
 
-      // Navigate to the home screen
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('loggedIn', true); // Lưu trạng thái đăng nhập
-      
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MyHomePage()),
-      );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MyHomePage()),
+        );
       } else {
-        // Show error message from server
+        // Handle login errors
         final errorResponse = json.decode(response.body);
         String errorMessage = errorResponse['message'] ?? 'Login failed. Please try again.';
         _showSuccessMessage(errorMessage);
       }
     } catch (e) {
-      _showSuccessMessage('An error occurred during login. Please check your connection.');
+      _showSuccessMessage('An error occurred. Please try again.');
     } finally {
       setState(() {
-        _isLoading = false; // Stop loading
+        _isLoading = false;
       });
     }
   }
 
-  // Validate inputs before logging in
   String? _validateInputs(String email, String password) {
     if (email.isEmpty) {
       return 'Email rỗng.';
@@ -107,7 +98,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return null;
   }
 
-  // Validate email format
   bool _isValidEmail(String email) {
     final regex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     return regex.hasMatch(email);

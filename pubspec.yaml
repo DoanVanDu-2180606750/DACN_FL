@@ -30,6 +30,8 @@ dependencies:
   heart_bpm: ^2.0.0+0
   sensors_plus: ^6.1.0
   shared_preferences: ^2.3.3
+  simple_kalman: ^1.0.2
+  app_links: ^6.3.2
 
 
 dependency_overrides:

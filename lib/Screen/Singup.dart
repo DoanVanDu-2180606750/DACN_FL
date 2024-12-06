@@ -28,7 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   try {
     final response = await http.post(
-      Uri.parse('http://10.17.18.247:8080/api/register'), // Use env variable for production
+      Uri.parse('http://192.168.1.7:8080/api/register'), // Use env variable for production
       headers: {'Content-Type': 'application/json'}, // Include headers
       body: json.encode({
         'name': _fullNameController.text,

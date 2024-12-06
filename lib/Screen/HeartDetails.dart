@@ -1,8 +1,8 @@
-import 'package:fit_25/Providers/heartProrvider.dart';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:heart_bpm/chart.dart';
 import 'package:heart_bpm/heart_bpm.dart';
+
 
 class HeartScreen extends StatefulWidget {
   const HeartScreen({super.key});
@@ -14,10 +14,22 @@ class HeartScreen extends StatefulWidget {
 class _HeartScreenState extends State<HeartScreen> {
   List<SensorValue> data = [];
   List<SensorValue> bpmValues = [];
+
   double totalBPM = 0.0;
   int countBPM = 0;
+
   bool isBPMEnabled = false;
 
+  /// Hàm trung bình động (Moving Average)
+  double movingAverage(List<double> values, int windowSize) {
+    if (values.isEmpty) return 0.0;
+    if (values.length < windowSize) {
+      return values.reduce((a, b) => a + b) / values.length;
+    }
+    return values.sublist(values.length - windowSize).reduce((a, b) => a + b) / windowSize;
+  }
+
+  /// Render biểu đồ
   Widget buildChart(List<SensorValue> values) {
     if (values.isNotEmpty) {
       return Container(
@@ -32,37 +44,40 @@ class _HeartScreenState extends State<HeartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Center(child: Text('Đo Nhịp Tim')),
-      ),
-      body: SingleChildScrollView( // Thêm SingleChildScrollView ở đây
+      body: SingleChildScrollView(
         child: Column(
           children: [
+            // HeartBPM Dialog
             isBPMEnabled
                 ? HeartBPMDialog(
                     context: context,
                     showTextValues: true,
                     borderRadius: 10,
+                    sampleDelay: 300,
                     onRawData: (value) {
                       setState(() {
-                        if (data.length >= 100) data.removeAt(0);
+                        if (data.length >= 300) data.removeAt(2);
                         data.add(value);
                       });
                     },
                     onBPM: (value) {
+                      // Bỏ qua giá trị nằm ngoài phạm vi 40-200 BPM (lọc ngưỡng)
+                      if (value < 40 || value > 200) {
+                        return;
+                      }
                       setState(() {
-                        if (bpmValues.length >= 100) bpmValues.removeAt(0);
-                        bpmValues.add(SensorValue(value: value.toDouble(), time: DateTime.now()));
-                        totalBPM += value;
+                        if (bpmValues.length >= 300) bpmValues.removeAt(0);
+                        bpmValues.add(SensorValue(value: value.toDouble(), time: DateTime.now())); // Sử dụng giá trị BPM trực tiếp
+                        totalBPM += value.toDouble();
                         countBPM++;
                       });
                     },
                   )
                 : const SizedBox(),
+
+            // Biểu đồ thô
             buildChart(data),
-            buildChart(bpmValues),
+            // Nút Bắt Đầu hoặc Dừng
             Center(
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.favorite_rounded),
@@ -72,17 +87,14 @@ class _HeartScreenState extends State<HeartScreen> {
                     if (isBPMEnabled) {
                       isBPMEnabled = false;
                       double averageBPM = countBPM > 0 ? totalBPM / countBPM : 0;
-
-                      // Cập nhật provider với dữ liệu nhịp tim
-                      Provider.of<HeartRateProvider>(context, listen: false)
-                          .updateHeartRate(averageBPM, bpmValues);
-
-                      // Hiển thị kết quả
+                      // Hiển thị kết quả cho người dùng
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
                           title: const Text("Kết quả"),
-                          content: Text("Nhịp tim trung bình: ${averageBPM.toStringAsFixed(2)} BPM"),
+                          content: Text(
+                            "Nhịp tim trung bình: ${averageBPM.toStringAsFixed(2)} BPM",
+                          ),
                           actions: [
                             TextButton(
                               onPressed: () {

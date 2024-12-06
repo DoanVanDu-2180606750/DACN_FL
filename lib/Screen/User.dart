@@ -1,6 +1,7 @@
 import 'package:fit_25/Model/user_mode.dart';
 import 'package:fit_25/Providers/loginProvider.dart';
-import 'package:fit_25/Screen/EditProfile.dart'; 
+import 'package:fit_25/Screen/EditProfile.dart';
+import 'package:fit_25/Screen/Login.dart'; 
 import 'package:fit_25/Widgets/user_widget.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -25,7 +26,7 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Future<void> _getUserData() async {
-    final String url = 'http://10.17.18.247:8080/api/users/me'; // Adjust this as necessary
+    final String url = 'http://192.168.1.7:8080/api/users/me'; // Adjust this as necessary
 
     try {
       final userToken = Provider.of<UserProvider>(context, listen: false).token; // Get the token
@@ -83,6 +84,7 @@ class _UserScreenState extends State<UserScreen> {
   
   @override
   Widget build(BuildContext context) {
+    final image = Provider.of<UserProvider>(context, listen: false).image;
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator()); // Loading state
     }
@@ -92,7 +94,6 @@ class _UserScreenState extends State<UserScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Thông tin người dùng')),
       body: RefreshIndicator(
         onRefresh: _getUserData,
         child: Padding(
@@ -103,16 +104,15 @@ class _UserScreenState extends State<UserScreen> {
                 radius: 55,
                 backgroundImage: user?.image != null 
                     ? NetworkImage(user!.image) 
-                    : null, // Fallback image
-                child: user!.image == null ? const Icon(Icons.person, size: 55) : null,
+                    : AssetImage('assets/Images/User.jpg'),
               ),
               Text(
                 user!.name ?? 'Tên không có sẵn',
                 style: const TextStyle(fontSize: 24),
               ),
               const SizedBox(height: 16),
-              UserWidget.infoRow('Email', user!.email ?? 'N/A'),
-              UserWidget.infoRow('Giới tính', user!.gender ?? 'N/A'),
+              UserWidget.infoRow('Email', user!.email),
+              UserWidget.infoRow('Giới tính', user!.gender ?? ''),
               UserWidget.infoRow('Số Điện Thoại', user!.phone ?? 'N/A'),
               UserWidget.infoRow('Địa chỉ', user!.address ?? 'N/A'),
               const SizedBox(height: 20),
@@ -122,31 +122,14 @@ class _UserScreenState extends State<UserScreen> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () async {
-                  final shouldLogout = await showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('Đăng Xuất'),
-                      content: const Text('Bạn có chắc chắn muốn đăng xuất không?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(false),
-                          child: const Text('Không'),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(true),
-                          child: const Text('Có'),
-                        ),
-                      ],
-                    ),
+                onPressed: () {
+                  Provider.of<UserProvider>(context, listen: false).clearUserDetails();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
                   );
-
-                  if (shouldLogout) {
-                    Provider.of<UserProvider>(context, listen: false).clear();
-                    Navigator.pushReplacementNamed(context, '/login');
-                  }
                 },
-                child: const Text('Đăng Xuất'),
+                child: const Text("Log Out"),
               ),
             ],
           ),

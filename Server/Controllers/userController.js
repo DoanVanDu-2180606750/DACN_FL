@@ -17,7 +17,7 @@ exports.updateCurrentUser = async (req, res) => {
 
   // Kiểm tra nếu có hình ảnh đã được tải lên
   if (req.file) {
-    updateData.image = `http://10.17.18.247:${port}/uploads/${req.file.filename}`; // Set the image path
+    updateData.image = `http://192.168.1.7:${port}/uploads/${req.file.filename}`; // Set the image path
   }
 
   try {

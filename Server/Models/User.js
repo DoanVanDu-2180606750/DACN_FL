@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
   },
   gender: {
     type: String,
-    enum: ['male', 'female', 'other'],
+    enum: ['Nam', 'Nữ', 'Khác'],
   },
   address: {
     type: String,
@@ -28,24 +28,21 @@ const userSchema = new mongoose.Schema({
   },
   image: {
     type: String,
+    default: 'https://static.vecteezy.com/system/resources/previews/019/879/186/original/user-icon-on-transparent-background-free-png.png'
   },
   role: {
     type: String,
     enum: ['user', 'admin'], // Define possible roles
     default: 'user' // Default role
   },
-    vToken: {
-      type: String,
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },lastLogin: {
+    type: Date,
+    default: Date.now,
   },
+    
 }, { timestamps: true },
-{ versionKey: false },
-{ versionKey: '_somethingElse' });
-
-userSchema.set('toJSON', {
-  transform: (doc, ret) => {
-    delete ret.__v; // Delete the __v field from the response
-    return ret; // Return the modified object without __v
-  },
-});
-
+{ versionKey: false });
 module.exports = mongoose.model('User', userSchema);

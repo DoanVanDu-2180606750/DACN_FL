@@ -57,20 +57,6 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Image.asset('assets/Images/logo.png', height: 30),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: CircleAvatar(
-              radius: 25,
-              child: Center(
-                child: CircleAvatar(
-                  radius: 25,
-                  backgroundImage: NetworkImage('$image'),
-                )
-              ),
-            ),
-          ),
-        ],
       ),
       body: _widgetOptions[_selectedIndex], // Display the selected screen
       bottomNavigationBar: BottomNavigationBar(

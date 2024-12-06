@@ -97,46 +97,50 @@ class _StepsDetailsScreenState extends State<StepsDetailsScreen> {
   Future<void> _loadSteps() async {
     final prefs = await SharedPreferences.getInstance();
     
+    // Tải dữ liệu đã lưu
     setState(() {
       _stepCount = prefs.getInt('stepCount') ?? 0;
       weeklySteps = (prefs.getStringList('weeklySteps') ?? List.generate(7, (_) => '0'))
           .map((e) => double.parse(e))
           .toList();
-
-      // Thêm đoạn này để tải kcal từ SharedPreferences
       weeklyKcal = (prefs.getStringList('weeklyKcal') ?? List.generate(7, (_) => '0'))
           .map((e) => double.parse(e))
           .toList();
     });
 
-    // Kiểm tra tuần hiện tại
-    int lastSavedWeek = prefs.getInt('lastSavedWeek') ?? _currentWeekNumber();
-    if (lastSavedWeek != _currentWeekNumber()) {
-      // Reset dữ liệu nếu là tuần mới
+    // Kiểm tra ngày cuối cùng lưu dữ liệu
+    String lastSavedDate = prefs.getString('lastSavedDate') ?? DateFormat('yyyy-MM-dd').format(DateTime.now());
+    String currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    
+    if (lastSavedDate != currentDate) {
+      // Nếu ngày mới, reset bước chân và kcal cho ngày đó
       setState(() {
-        weeklySteps = List.generate(7, (_) => 0);
-        weeklyKcal = List.generate(7, (_) => 0); // Reset kcal khi bắt đầu tuần mới
+        _stepCount = 0; // Reset số bước
+        weeklySteps[DateTime.now().weekday - 1] = 0; // Reset bước theo ngày trong tuần
+        weeklyKcal[DateTime.now().weekday - 1] = 0;  // Reset kcal theo ngày
       });
-      await _saveSteps(); // Cập nhật dữ liệu mới
+      await _saveSteps(); // Lưu lại thông tin reset
     }
   }
+
 
   Future<void> _saveSteps() async {
     final prefs = await SharedPreferences.getInstance();
     
-    prefs.setInt('stepCount', _stepCount);  // Lưu số bước
-    prefs.setInt('lastSavedWeek', _currentWeekNumber());  // Lưu tuần hiện tại
+    // Lưu thông tin số bước và kcal
+    prefs.setInt('stepCount', _stepCount);
+    prefs.setString('lastSavedDate', DateFormat('yyyy-MM-dd').format(DateTime.now())); // Lưu ngày hiện tại
     
-    int dayOfWeek = DateTime.now().weekday - 1; 
+    int dayOfWeek = DateTime.now().weekday - 1;
     if (dayOfWeek >= 0) {
       weeklySteps[dayOfWeek] = _stepCount.toDouble();
       prefs.setStringList('weeklySteps', weeklySteps.map((e) => e.toString()).toList());
       
-      // Tính và lưu số kcal cho ngày hôm nay
-      _calculateKcal(); // Tính kcal
-      prefs.setStringList('weeklyKcal', weeklyKcal.map((e) => e.toString()).toList()); // Lưu số kcal vào SharedPreferences
+      _calculateKcal(); // Cập nhật kcal
+      prefs.setStringList('weeklyKcal', weeklyKcal.map((e) => e.toString()).toList());
     }
   }
+
 
   Future<void> _initPlatformState() async {
     if (await _checkActivityRecognitionPermission()) {
