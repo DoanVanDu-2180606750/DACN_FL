@@ -47,7 +47,6 @@ exports.getVerify = async (req, res) => {
   if (!token) {
     return res.status(400).send('Không tìm thấy token.'); // Xử lý khi không có token
   }
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id; // Chỉnh sửa key thành userId
@@ -65,52 +64,52 @@ exports.getVerify = async (req, res) => {
 
 // Quên mật khẩu
 exports.forget = async (req, res) => {
-  const { email } = req.body; // Giả sử email được gửi từ client trong phần thân yêu cầu
-
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'Email không tồn tại.' }); // Thông báo nếu không tìm thấy người dùng
-    }
-
-    // Tạo token reset mật khẩu
-    const resetToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    // Tạo đường dẫn xác thực
-    const resetUrl = `http://192.168.1.7:${process.env.PORT}/api/reset-password/${resetToken}`; // Địa chỉ trang reset mật khẩu
-
-    // Gửi email với liên kết đặt lại mật khẩu
-    const emailContent = `Nhấp vào đây để reset password: ${resetUrl}`;
-
-
-    await sendEmail(email,'Reset password', emailContent);
-    
-    res.status(200).json({ message: 'Email đã được gửi! Vui lòng kiểm tra hộp thư của bạn.' });
-    } catch (error) {
-      console.error("Có lỗi xảy ra khi quên mật khẩu:", error);
-      res.status(500).json({ message: 'Có lỗi xảy ra, xin hãy thử lại sau.' });
-    }
-  };
-
-  // Đặt lại mật khẩu
-  exports.resetPassword = async (req, res) => {
-    const { token, newPassword } = req.body;
+    const { email, newPassword } = req.body;
 
     try {
-      // Giải mã token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const userId = decoded.id;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: 'Email không tồn tại.' });
+        }
 
-      // Tìm người dùng và cập nhật mật khẩu
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      await User.findByIdAndUpdate(userId, { password: hashedPassword });
+        // Tạo token reset mật khẩu
+        const resetToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-      res.status(200).json({ message: 'Mật khẩu đã được cập nhật thành công!' });
+        // Tạo đường dẫn xác nhận thay đổi mật khẩu
+        const resetUrl = `http://192.168.1.7:${process.env.PORT}/api/reset-password/${resetToken}?email=${email}&newPassword=${newPassword}`;
+
+        // Gửi email với liên kết thay đổi mật khẩu
+        const emailContent = `Nhấp vào đây để đổi mật khẩu: ${resetUrl}`;
+
+        await sendEmail(email, 'Xác nhận thay đổi mật khẩu', emailContent);
+
+        res.status(200).json({ message: 'Email đã được gửi! Vui lòng kiểm tra hộp thư của bạn.' });
     } catch (error) {
-      console.error('Lỗi trong quá trình đặt lại mật khẩu:', error);
-      res.status(400).json({ message: 'Token không hợp lệ hoặc đã hết hạn.' });
+        console.error("Có lỗi xảy ra khi yêu cầu thay đổi mật khẩu:", error);
+        res.status(500).json({ message: 'Có lỗi xảy ra, xin hãy thử lại sau.' });
     }
-  };
+};
+
+// Đặt lại mật khẩu
+exports.resetPassword = async (req, res) => {
+    const { token } = req.params;
+    const { newPassword } = req.query;
+
+    try {
+        // Giải mã token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const userId = decoded.id;
+
+        // Tìm người dùng và cập nhật mật khẩu
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        await User.findByIdAndUpdate(userId, { password: hashedPassword });
+
+        res.status(200).json({ message: 'Mật khẩu đã được cập nhật thành công!' });
+    } catch (error) {
+        console.error('Lỗi trong quá trình đặt lại mật khẩu:', error);
+        res.status(400).json({ message: 'Token không hợp lệ hoặc đã hết hạn.' });
+    }
+};
 
 
 // Đăng nhập người dùng

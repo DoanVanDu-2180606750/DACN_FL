@@ -1,6 +1,7 @@
+import 'package:fit_25/Providers/bodyProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:fit_25/Providers/bodyProvider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BodyWidgets {
   static Widget inputFields(TextEditingController heightController, TextEditingController weightController) {
@@ -53,6 +54,11 @@ class BodyWidgets {
           return;
         }
 
+        // Lưu dữ liệu vào SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setDouble('height', height);
+        await prefs.setDouble('weight', weight);
+        
         // Update user info
         Provider.of<BodyProvider>(context, listen: false).updateUserInfo(height, weight);
 

@@ -20,10 +20,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?; 
+      final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
       if (args != null && args['message'] != null) {
         _showSuccessMessage(args['message']);
       }
@@ -53,11 +51,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-
         final userData = jsonResponse['user'];
         final String token = jsonResponse['token'];
 
-        // Get the UserProvider instance and update the user details
         Provider.of<UserProvider>(context, listen: false).setUserDetails(
           name: userData['name'],
           email: userData['email'],
@@ -71,7 +67,6 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(builder: (context) => const MyHomePage()),
         );
       } else {
-        // Handle login errors
         final errorResponse = json.decode(response.body);
         String errorMessage = errorResponse['message'] ?? 'Login failed. Please try again.';
         _showSuccessMessage(errorMessage);
@@ -85,29 +80,11 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  String? _validateInputs(String email, String password) {
-    if (email.isEmpty) {
-      return 'Email rỗng.';
-    }
-    if (!_isValidEmail(email)) {
-      return 'Email không hợp lệ.';
-    }
-    if (password.isEmpty) {
-      return 'Mật khẩu rỗng.';
-    }
-    return null;
-  }
-
-  bool _isValidEmail(String email) {
-    final regex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-    return regex.hasMatch(email);
-  }
-
   void _showSuccessMessage(String message) {
     final overlay = Overlay.of(context);
     final overlayEntry = OverlayEntry(
       builder: (context) => Positioned(
-        top: 40, 
+        top: 40,
         left: 20,
         right: 20,
         child: Material(
@@ -137,7 +114,12 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.green, const Color.fromARGB(255, 17, 203, 236), Colors.blue.shade200, Colors.blue.shade400],
+            colors: [
+              Colors.green,
+              const Color.fromARGB(255, 17, 203, 236),
+              Colors.blue.shade200,
+              Colors.blue.shade400
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -147,7 +129,9 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                // Tiêu đề và mô tả
                 Container(
                   padding: const EdgeInsets.all(16.0),
                   margin: const EdgeInsets.only(bottom: 20),
@@ -185,7 +169,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 60),
+
+                // Email Input
                 TextField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -201,7 +188,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   style: const TextStyle(color: Colors.white),
                 ),
+
                 const SizedBox(height: 16),
+
+                // Password Input
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
@@ -218,9 +208,32 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   style: const TextStyle(color: Colors.white),
                 ),
+
                 const SizedBox(height: 24),
+
+                // "Quên mật khẩu" nằm trên "Đăng nhập"
+                Align(
+                  alignment: Alignment.centerLeft, // Canh trái cho "Quên mật khẩu"
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/foget');
+                      print("Quên mật khẩu được nhấn");
+                    },
+                    child: const Text(
+                      "Quên mật khẩu?",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                // Nút đăng nhập
                 ElevatedButton(
-                  onPressed: _isLoading ? null : _login, // Disable button if loading
+                  onPressed: _isLoading ? null : _login,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 16, 237, 38),
                     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
@@ -228,17 +241,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: _isLoading 
-                    ? const CircularProgressIndicator() // Show loading indicator
-                    : const Text('Đăng Nhập', style: TextStyle(fontSize: 16)),
+                  child: _isLoading
+                      ? const CircularProgressIndicator()
+                      : const Text('Đăng Nhập', style: TextStyle(fontSize: 16)),
                 ),
+
+                const SizedBox(height: 16),
+
+                // Đăng ký tài khoản
                 TextButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()));
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (context) => SignUpScreen()));
                   },
                   child: const Text(
                     "Bạn chưa có tài khoản? Đăng ký",
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],

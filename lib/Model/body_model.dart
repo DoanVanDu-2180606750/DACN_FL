@@ -1,10 +1,12 @@
 class BodyInfo {
   double height; 
   double weight; 
-
+  
   BodyInfo({
     required this.height,
     required this.weight,
+
+
   });
 
 

@@ -1,9 +1,7 @@
 import 'package:fit_25/Providers/StepsProvider.dart';
 import 'package:fit_25/Providers/bodyProvider.dart';
-import 'package:fit_25/Providers/heartProrvider.dart';
 import 'package:fit_25/Providers/loginProvider.dart';
 import 'package:fit_25/Providers/weatherData.dart';
-import 'package:fit_25/Screen/Home.dart';
 import 'package:fit_25/Screen/Login.dart';
 import 'package:fit_25/Screen/MainPage.dart';
 import 'package:fit_25/Screen/Singup.dart';
@@ -14,7 +12,7 @@ import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+
   Gemini.init(apiKey: API_KEY_AI); // Đảm bảo bạn có API_KEY chính xác
 
   runApp(
@@ -24,7 +22,6 @@ void main() async {
         ChangeNotifierProvider(create: (context) => BodyProvider()),
         ChangeNotifierProvider(create: (context) => WeatherProvider()),
         ChangeNotifierProvider(create: (context) => StepsProvider()),
-        ChangeNotifierProvider(create: (context) => HeartRateProvider()),
       ],
       child: const MyApp(),
     ),

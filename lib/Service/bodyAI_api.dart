@@ -25,7 +25,7 @@ class BodyService with ChangeNotifier {
         {
           'parts': [
             {
-              'text': "Tôi cao: $height m và cân nặng: $weight kg, tính chỉ số BMI và đưa ra nhận xét. Viết khoảng 4 câu thôi.",
+              'text': "Tôi cao: $height m và cân nặng: $weight kg, tính chỉ số BMI và đưa ra nhận xét và cho tôi các chế độ ăn phù hợp. Viết khoảng 4 câu thôi.",
             }
           ]
         }

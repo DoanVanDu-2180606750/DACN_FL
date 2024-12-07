@@ -1,4 +1,5 @@
 import 'package:fit_25/Model/food_model.dart';
+import 'package:fit_25/Screen/Kcalcurr.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -24,7 +25,7 @@ class _CalorieScreenState extends State<CalorieScreen> {
   };
 
   Future<void> _getFoods() async {
-    final String url = 'http://192.168.1.6:8080/api/get_diet';
+    final String url = 'http://192.168.1.7:8080/api/get_diet';
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       setState(() {
@@ -71,9 +72,9 @@ class _CalorieScreenState extends State<CalorieScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bảng Tính Calo Theo Loại'),
+        title: const Text('Bảng Tính Calo Theo Loại'),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(70),
+          preferredSize: const Size.fromHeight(70),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Autocomplete<String>(
@@ -98,7 +99,7 @@ class _CalorieScreenState extends State<CalorieScreen> {
                   focusNode: focusNode,
                   decoration: InputDecoration(
                     hintText: 'Tìm kiếm thực phẩm...',
-                    prefixIcon: Icon(Icons.search),
+                    prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
@@ -115,14 +116,14 @@ class _CalorieScreenState extends State<CalorieScreen> {
         itemBuilder: (context, index) {
           final food = filteredFoods[index];
           return Card(
-            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(food['name']!, style: TextStyle(fontWeight: FontWeight.bold)),
-                  SizedBox(height: 5),
+                  Text(food['name']!, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -138,6 +139,11 @@ class _CalorieScreenState extends State<CalorieScreen> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.border_color, size: 30,),
+        onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => CalorieCalculatorScreen()));
+      }),
     );
   }
 }

@@ -1,12 +1,11 @@
-import 'package:fit_25/Providers/heartProrvider.dart';
+
+import 'package:fit_25/Screen/FoodDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fit_25/Providers/weatherData.dart';
-import 'package:fit_25/Providers/StepsProvider.dart';
-import 'package:fit_25/Providers/bodyProvider.dart';
-import 'package:fit_25/Screen/DietDetails.dart';
 import 'package:fit_25/Widgets/home_widget.dart';
 import 'package:fit_25/Widgets/weather_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,12 +13,31 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  
+  int? steps;
+  double? kcal;
+
+  double? height; // Giá trị chiều cao
+  double? weight; // Giá trị cân nặng
+  
   @override
   void initState() {
     super.initState();
     // Load weather data after the first frame is built.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadData();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchWeatherData();
+    });
+  }
+
+  Future<void> _loadData() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      height = prefs.getDouble('height'); // Lấy chiều cao
+      weight = prefs.getDouble('weight'); // Lấy cân nặng
+      steps =  prefs.getInt('stepCount'); // Lấy cân nặng
+      kcal =  (steps!* 0.04) as double?;
     });
   }
 
@@ -31,8 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final weatherProvider = Provider.of<WeatherProvider>(context);
-    final stepsProvider = Provider.of<StepsProvider>(context);
-    final heartProvider = Provider.of<HeartRateProvider>(context);
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -79,11 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     HomeWidget.buildInfoBodyCard(
                       'Weight',
-                      '${context.watch<BodyProvider>().bodyInfo?.weight ?? 'N/A'} kg',
+                      '${weight?.toStringAsFixed(1) ?? 'N/A'} kg',
                     ),
                     HomeWidget.buildInfoBodyCard(
                       'Height',
-                      '${context.watch<BodyProvider>().bodyInfo?.height ?? 'N/A'} m',
+                      '${height?.toStringAsFixed(2) ?? 'N/A'} m',
                     ),
                   ],
                 ),
@@ -103,11 +119,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     HomeWidget.buildStepsCards(
                       'Steps',
-                      '${stepsProvider.stepData.currentSteps}',
+                      steps?.toStringAsFixed(1) ?? 'N/A',
                     ),
                     HomeWidget.buildStepsCards(
                       'Kcal',
-                      '${stepsProvider.stepData.caloriesBurned}',
+                      kcal?.toString() ?? 'N/A',
                       ),
                   ],
                 ),
@@ -127,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        // Add your onTap functionality here
+                        Navigator.push(context, MaterialPageRoute(builder: (context) =>  CalorieScreen()));
                       },
                       child: Container(
                         height: 80,
@@ -138,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: const Center(
                           child: Text(
-                            'sds', // Replace with meaningful text
+                            'Thông tin thực phẩm', // Replace with meaningful text
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
