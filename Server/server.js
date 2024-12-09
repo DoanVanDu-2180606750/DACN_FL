@@ -3,16 +3,24 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const uploadService = require('./Services/uploadService'); 
 dotenv.config();
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT;
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 uploadService.setupUpload(app);
 
 // Database Connection
 const connectToDatabase = require('./Configs/db');
 connectToDatabase();
+
+app.use(cors({
+  origin: ['http://127.0.0.1:5500'], // Array of allowed origins
+  methods: 'GET, POST, PUT, DELETE', // Allow specific methods
+  credentials: true // Allow cookies to be sent with requests
+}));
 
 // Routes
 app.use('/api', require('./Routes/dietRoutes'));

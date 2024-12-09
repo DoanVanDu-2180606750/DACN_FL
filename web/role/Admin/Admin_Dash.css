@@ -1,0 +1,144 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.header {
+    background-color: #004d40;
+    color: #ffffff;
+    text-align: center;
+    padding: 1.5rem 0;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    margin: 6;
+}
+
+#logout-button {
+    padding: 0.8rem 1.5rem;
+    background-color: #ff4d4f;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+#logout-button:hover {
+    background-color: #b5f5b9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+#logout-button:active {
+    background-color: #065f0c;
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+.header p {
+    font-size: 1.2rem;
+    margin: 0.5rem 0 0;
+}
+
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.form-section, .table-section {
+    margin-bottom: 2rem;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-section h2, .table-section h2 {
+    margin-bottom: 1rem;
+    color: #004d40;
+}
+
+.user-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input, .form-group select {
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn {
+    padding: 0.8rem 1.5rem;
+    background-color: #004d40;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #00796b;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.user-table th, .user-table td {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.user-table th {
+    background-color: #004d40;
+    color: #ffffff;
+}
+
+.user-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.user-table tbody tr:hover {
+    background-color: #e0f2f1;
+}
+
+.user-table button {
+    margin-right: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #00796b;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.user-table button:hover {
+    background-color: #004d40;
+}

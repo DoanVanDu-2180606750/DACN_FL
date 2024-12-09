@@ -1,11 +1,15 @@
 import 'package:fit_25/Providers/loginProvider.dart';
 import 'package:fit_25/Screen/MainPage.dart';
 import 'package:fit_25/Screen/Singup.dart';
+import 'package:fit_25/Widgets/login_widget.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+import 'dart:developer' as developer;
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/services.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -13,101 +17,104 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _isLoading = false; // State variable for loading
+  bool _isLoading = false; 
+  final loginWidget = LoginWidget();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
       if (args != null && args['message'] != null) {
-        _showSuccessMessage(args['message']);
+        loginWidget.showSuccessMessage(args['message'], context);
       }
     });
   }
 
-  Future<void> _login() async {
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
-
-    // Validate inputs
-    if (email.isEmpty || password.isEmpty) {
-      _showSuccessMessage('Email and password must not be empty.');
+  Future<void> initConnectivity() async {
+    late List<ConnectivityResult> result;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      developer.log('Couldn\'t check connectivity status', error: e);
       return;
     }
 
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
     setState(() {
-      _isLoading = true;
+      _connectionStatus = result;
     });
-
-    try {
-      final response = await http.post(
-        Uri.parse('http://192.168.1.7:8080/api/login'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({'email': email, 'password': password}),
-      );
-
-      if (response.statusCode == 200) {
-        final jsonResponse = json.decode(response.body);
-        final userData = jsonResponse['user'];
-        final String token = jsonResponse['token'];
-
-        Provider.of<UserProvider>(context, listen: false).setUserDetails(
-          name: userData['name'],
-          email: userData['email'],
-          image: userData['image'], // Example: adjust based on the backend
-          isVerified: userData['isVerified'],
-          token: token,
-        );
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const MyHomePage()),
-        );
-      } else {
-        final errorResponse = json.decode(response.body);
-        String errorMessage = errorResponse['message'] ?? 'Login failed. Please try again.';
-        _showSuccessMessage(errorMessage);
-      }
-    } catch (e) {
-      _showSuccessMessage('An error occurred. Please try again.');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
+    print(_connectionStatus);
+    if( _connectionStatus.contains(ConnectivityResult.none)){
+     loginWidget.showSuccessMessage('Không có kết nối mạng', context);
+    } else {
+      loginWidget.showSuccessMessage('Kết nối mạng ổn định', context);
     }
   }
 
-  void _showSuccessMessage(String message) {
-    final overlay = Overlay.of(context);
-    final overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        top: 40,
-        left: 20,
-        right: 20,
-        child: Material(
-          elevation: 4.0,
-          child: Container(
-            color: Colors.green,
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-            child: Text(
-              message,
-              style: const TextStyle(color: Colors.white, fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-      ),
-    );
+  Future<void> _login() async {
+    if (_formKey.currentState!.validate()) {
+      String email = _emailController.text.trim();
+      String password = _passwordController.text.trim();
 
-    overlay.insert(overlayEntry);
-    Future.delayed(const Duration(seconds: 3), () {
-      overlayEntry.remove();
-    });
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        final response = await http.post(
+          Uri.parse('http://192.168.1.7:8080/api/login'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode({'email': email, 'password': password}),
+        );
+
+        if (response.statusCode == 200) {
+          final jsonResponse = json.decode(response.body);
+          final userData = jsonResponse['user'];
+          final String token = jsonResponse['token'];
+
+          Provider.of<UserProvider>(context, listen: false).setUserDetails(
+            name: userData['name'],
+            email: userData['email'],
+            image: userData['image'],
+            isVerified: userData['isVerified'],
+            token: token,
+          );
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const MyHomePage()),
+          );
+        } else {
+          final errorResponse = json.decode(response.body);
+          String errorMessage = errorResponse['message'] ?? 'Đăng nhập thất bại';
+          loginWidget.showSuccessMessage(errorMessage, context);
+        }
+      } catch (e) {
+        loginWidget.showSuccessMessage('Đã xảy ra lỗi', context);
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -118,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Colors.green,
               const Color.fromARGB(255, 17, 203, 236),
               Colors.blue.shade200,
-              Colors.blue.shade400
+              Colors.blue.shade400,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -129,12 +136,9 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Tiêu đề và mô tả
                 Container(
                   padding: const EdgeInsets.all(16.0),
-                  margin: const EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                     color: const Color.fromARGB(255, 15, 154, 181),
                     borderRadius: BorderRadius.circular(12),
@@ -142,7 +146,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       BoxShadow(
                         color: Colors.black26,
                         blurRadius: 10.0,
-                        offset: Offset(0, 9),
                       ),
                     ],
                   ),
@@ -169,51 +172,68 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 60),
-
-                // Email Input
-                TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.email, color: Colors.white),
-                    labelText: 'Email',
-                    filled: true,
-                    fillColor: Colors.blue.shade800,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                    labelStyle: const TextStyle(color: Colors.white),
+                Form(
+                  key: _formKey,  // Thêm _formKey vào đây
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.email, color: Colors.white),
+                          labelText: 'Email',
+                          filled: true,
+                          fillColor: Colors.blue.shade800,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          labelStyle: const TextStyle(color: Colors.white),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Nhập email';
+                          }
+                          if (!RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
+                            return 'Nhập đúng email';
+                          }
+                          return null; // Trả về null nếu không có lỗi
+                        },
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      const SizedBox(height: 16),
+                      // Password Input
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.lock, color: Colors.white),
+                          labelText: 'Mật khẩu',
+                          filled: true,
+                          fillColor: Colors.blue.shade800,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          labelStyle: const TextStyle(color: Colors.white),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Nhập mật khẩu';
+                          }
+                          if (value.length < 8) {
+                            return 'Mật khẩu phải có hơn 7 ký tự';
+                          }
+                          return null; // Trả về null nếu không có lỗi
+                        },
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ],
                   ),
-                  style: const TextStyle(color: Colors.white),
                 ),
-
-                const SizedBox(height: 16),
-
-                // Password Input
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.lock, color: Colors.white),
-                    labelText: 'Mật khẩu',
-                    filled: true,
-                    fillColor: Colors.blue.shade800,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                    labelStyle: const TextStyle(color: Colors.white),
-                  ),
-                  style: const TextStyle(color: Colors.white),
-                ),
-
                 const SizedBox(height: 24),
-
-                // "Quên mật khẩu" nằm trên "Đăng nhập"
                 Align(
-                  alignment: Alignment.centerLeft, // Canh trái cho "Quên mật khẩu"
+                  alignment: Alignment.centerLeft,
                   child: TextButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/foget');
@@ -228,10 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 12),
-
-                // Nút đăng nhập
                 ElevatedButton(
                   onPressed: _isLoading ? null : _login,
                   style: ElevatedButton.styleFrom(
@@ -245,14 +262,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ? const CircularProgressIndicator()
                       : const Text('Đăng Nhập', style: TextStyle(fontSize: 16)),
                 ),
-
                 const SizedBox(height: 16),
-
-                // Đăng ký tài khoản
                 TextButton(
                   onPressed: () {
                     Navigator.push(
-                        context, MaterialPageRoute(builder: (context) => SignUpScreen()));
+                      context, MaterialPageRoute(builder: (context) => SignUpScreen()));
                   },
                   child: const Text(
                     "Bạn chưa có tài khoản? Đăng ký",

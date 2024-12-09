@@ -26,7 +26,6 @@ const authorize = (roles = []) => {
         return res.status(403).json({ message: 'Access denied: insufficient permissions.' });
       }
       console.log(user.role);
-      console.log(user.email);
       req.user = user; // Attach user to request object
       next();
     } catch (error) {

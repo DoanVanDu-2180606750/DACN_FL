@@ -41,12 +41,33 @@ exports.updateCurrentUser = async (req, res) => {
 // Lấy thông tin của tất cả người dùng (chỉ admin)
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.find().select('-__v');
-    res.status(200).json(users);
+    
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const users = await User.find().select('-__v').skip(skip).limit(limit);
+    
+    const totalUsers = await User.countDocuments();
+
+    if (users.length === 0) {
+      return res.status(204).json({ message: 'No users found' });
+    }
+
+    res.status(200).json({
+      message: 'Users retrieved successfully',
+      data: users,
+      total: totalUsers,
+      currentPage: page,
+      totalPages: Math.ceil(totalUsers / limit),
+    });
+
   } catch (error) {
-    res.status(500).json({ message: 'Error retrieving users', error: error });
+    console.error('Error retrieving users:', error); // Log the error for debugging
+    res.status(500).json({ message: 'Error retrieving users', error: error.message });
   }
 };
+
 
 // Cập nhật thông tin người dùng theo ID (chỉ admin)
 exports.updateUserById = async (req, res) => {

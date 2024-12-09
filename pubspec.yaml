@@ -32,6 +32,7 @@ dependencies:
   shared_preferences: ^2.3.3
   simple_kalman: ^1.0.2
   app_links: ^6.3.2
+  connectivity_plus: ^6.1.0
 
 
 
